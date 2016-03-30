@@ -21,7 +21,7 @@
     
     .block {
         width: 50px;
-        height: 50px;
+        /*height: 50px;*/
         line-height: 50px;
         margin-right: 5px;
         background-color: #f00;
@@ -70,12 +70,16 @@
         for (var i = 0; i < btns.length; i++) {
             btns[i].addEventListener("click", function(e) {
                 var number = inputNumber.value;
-                if(isNaN(number)) {
+                if (isNaN(number)) {
                     alert("非法字符！请重新输入！");
                     return;
                 }
                 switch (e.target.id) {
                     case "unshift":
+                        if (number == "") {
+                            alert("输入不能为空");
+                            return;
+                        }
                         array.unshift(number);
                         console.log("unshift");
                         break;
@@ -84,6 +88,10 @@
                         console.log("shift");
                         break;
                     case "push":
+                        if (number == "") {
+                            alert("输入不能为空");
+                            return;
+                        }
                         array.push(number);
                         console.log("push");
                         break;
@@ -99,7 +107,7 @@
 
     function createBlockArray() {
         clearBlockArray();
-        if(array.length == 0){
+        if (array.length == 0) {
             alert("数组队列为空");
             return;
         }
@@ -107,13 +115,14 @@
             var blk = document.createElement("div");
             blk.className = "block";
             blk.innerHTML = item;
+            blk.height = item + "0px";
             blkArray.appendChild(blk);
         })
 
     }
 
     function clearBlockArray() {
-       blkArray.innerHTML = "";
+        blkArray.innerHTML = "";
     }
 
     window.onload = function() {

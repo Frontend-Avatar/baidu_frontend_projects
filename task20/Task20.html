@@ -18,6 +18,7 @@
         margin: 0;
         padding: 0;
     }
+    
     #inputText {
         float: left;
         width: 200px;
@@ -48,7 +49,7 @@
         width: 200px;
         height: 1em;
     }
-
+    
     .red {
         color: #f00;
     }
@@ -92,7 +93,7 @@
      * @param  {[type]} str [输入字符串]
      * @return {[type]} output [单词数组]
      */
-    function getWord(str){
+    function getWord(str) {
         var str = str.trim();
         var re = /[;,，、\s]+/
         var output = str.split(re);
@@ -106,26 +107,43 @@
      * @param  {[type]} words   [单词数组]
      * @return {[type]}         [description]
      */
-    function queryMatch(pattern, words){
+    function queryMatch(pattern, words) {
         var re = new RegExp(pattern);
         var oriText = $inputText.value;
         var replaceText = oriText;
         words.forEach(function(item, idex) {
-            if(re.test(item)) {
+            if (re.test(item)) {
                 var replaceWord = "<b class='red'>" + item + "</b>"
-                console.log(item);
-                replaceText = replaceText.replace(item, replaceWord);
+                var wordRe = new RegExp("\\b" + item + "\\b", "g"); //创建匹配单词的正则表达式，通过\b限定单词边界，以免匹配包含相同字符的其他单词
+                console.log(wordRe);
+                replaceText = replaceText.replace(wordRe, replaceWord); //全局替换
             }
         });
         $showText.innerHTML = replaceText;
     }
 
+    /**
+     * [uniqueArray 数组去重]
+     * @param  {[type]} array [输入数组]
+     * @return {[type]} res   [去重后的数组]
+     */
+    function uniqueArray(array) {
+        var res = [];
+        for (var i = 0; i < array.length; i++) {
+            if (res.indexOf(array[i]) == -1) {
+                res.push(array[i]);
+            }
+        }
+        return res;
+    }
+
+
     $query.addEventListener("click", function() {
         var pattern = $pattern.value;
         var result = getWord($inputText.value);
-        queryMatch(pattern, result);
+        var words = uniqueArray(result);
+        queryMatch(pattern, words);
     })
-
     </script>
 </body>
 
