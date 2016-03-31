@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>task22</title>
+    <style>
+    .container {
+        width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .panel {
+        text-align: center;
+        margin: 20px 20px;
+    }
+    
+    #root {
+        width: 1000px;
+    }
+    
+    .node {
+        display: flex;
+        position: relative;
+        flex: 1;
+        border: 2px solid;
+        padding: 20px 10px;
+        background-color: #fff;
+    }
+    
+    .node + .node {
+        margin-left: 5px;
+    }
+    
+    button {
+        /*background-color: #3371fe;*/
+        padding: 5px 10px;
+        margin-right: 5px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="panel">
+            <button id="preTraversal">前序遍历</button>
+            <button id="inTraversal">中序遍历</button>
+            <button id="postTraversal">后序遍历</button>
+            <label for="speed">速度(ms):</label>
+            <input type="number" id="speed">
+        </div>
+        <div class="node" id="root">
+            <div class="node">
+                <div class="node">
+                    <div class="node"></div>
+                    <div class="node"></div>
+                </div>
+                <div class="node">
+                    <div class="node"></div>
+                    <div class="node"></div>
+                </div>
+            </div>
+            <div class="node">
+                <div class="node">
+                    <div class="node"></div>
+                    <div class="node"></div>
+                </div>
+                <div class="node">
+                    <div class="node"></div>
+                    <div class="node"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+        //节点对象
+        function Node(ele) {
+            this.ele = ele;
+            this.left = null;
+            this.right = null;
+        }
+
+
+        //二叉树对象
+        function BinaryTree(ele) {
+            var node = new Node(ele);
+            this.root = node;
+            this.animStack = [];
+        }
+
+        //新建二叉树
+        BinaryTree.prototype.treeBuild = function(node) {
+            if (!(node == null)) {
+                var children = node.ele.children;
+                console.log(children);
+                if (!(children[0] == null)) node.left = new Node(children[0]);
+                if (!(children[1] == null)) node.right = new Node(children[1]);
+
+                this.treeBuild(node.left);
+                this.treeBuild(node.right)
+            }
+        };
+
+        //前序遍历
+        BinaryTree.prototype.preorderTraverse = function(node) {
+            if (!(node == null)) {
+                this.addToStack(node);
+                this.preorderTraverse(node.left);
+                this.preorderTraverse(node.right);
+            }
+        };
+
+        //中序遍历
+        BinaryTree.prototype.inorderTraverse = function(node) {
+            if (!(node == null)) {
+                this.inorderTraverse(node.left);
+                this.addToStack(node);
+                this.inorderTraverse(node.right);
+            }
+        };
+
+        //后序遍历
+        BinaryTree.prototype.postorderTraverse = function(node) {
+            if (!(node == null)) {
+                this.postorderTraverse(node.left);
+                this.postorderTraverse(node.right);
+                this.addToStack(node);
+            }
+        };
+
+
+        //将遍历的节点存入到播放组当中
+        BinaryTree.prototype.addToStack = function(node) {
+            this.animStack.push(node.ele);
+        };
+
+        //遍历动画播放
+        BinaryTree.prototype.showAnimation = function() {
+            var iter = 0;
+            var self = this;
+            var speeder =  document.getElementById("speed");
+            speed = speeder.value == 0 ? 200 : speeder.value;
+            self.animStack[iter].style.backgroundColor = "red";
+            var timer = setInterval(function() {
+                if (iter >= self.animStack.length - 1) {
+                    clearInterval(timer)
+                    self.animStack[iter].style.backgroundColor = "#fff";
+                    alert("Travesal finish");
+                } else {
+                    ++iter;
+                    self.animStack[iter - 1].style.backgroundColor = "#fff";
+                    self.animStack[iter].style.backgroundColor = "red";
+                }
+            }, speed);
+
+        };
+
+        //不同遍历方法的按钮
+        function addButtonHandlers() {
+            var self = this;
+            var buttons = document.getElementsByTagName("button");
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].addEventListener("click", function(evt) {
+                    var target = evt.target || window.target;
+                    switch (target.id) {
+                        case "preTraversal":
+                            self.preorderTraverse(self.root);
+                            break;
+                        case "inTraversal":
+                            self.inorderTraverse(self.root);
+                            break;
+                        case "postTraversal":
+                            self.postorderTraverse(self.root);
+                            break;
+                    }
+                    self.showAnimation();
+                }, false);
+            }
+        }
+
+        window.onload = function() {
+            var tree = new BinaryTree(document.getElementById("root"));
+            tree.treeBuild(tree.root);
+            addButtonHandlers.apply(tree);
+
+          /*  tree.preorderTraverse(tree.root);
+            tree.showAnimation();*/
+
+        }
+        </script>
+</body>
+
+</html>

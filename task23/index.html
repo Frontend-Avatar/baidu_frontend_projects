@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>task23(二叉树)</title>
+    <style>
+    * {
+        font-family: arial;
+    }
+    
+    .container {
+        margin: 0 auto;
+    }
+    
+    .panel {
+        text-align: center;
+        margin: 20px 20px;
+    }
+    
+    #root {}
+    
+    .node {
+        display: flex;
+        position: relative;
+        flex: 1;
+        border: 2px solid;
+        padding: 20px 10px;
+        background-color: #fff;
+    }
+    
+    .node + .node {
+        margin-left: 5px;
+    }
+    
+    button {
+        /*background-color: #3371fe;*/
+        padding: 5px 10px;
+        margin-right: 5px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="panel">
+            <button id="traversalDF">深度优先遍历</button>
+            <button id="traversalBF">广度优先遍历</button>
+            <label for="speed">速度(ms):</label>
+            <input type="number" id="speed">
+        </div>
+        <div class="node" id="root">super
+            <div class="node">
+                stuff
+                <div class="node">fruit
+                    <div class="node">apple</div>
+                    <div class="node">pear</div>
+                    <div class="node">grape</div>
+                </div>
+                <div class="node">electric application
+                    <div class="node">tv</div>
+                    <div class="node">phone</div>
+                </div>
+                <div class="node">book
+                    <div class="node">novel</div>
+                </div>
+            </div>
+            <div class="node">life
+                <div class="node">animal
+                    <div class="node">dog</div>
+                    <div class="node">cat</div>
+                </div>
+                <div class="node">plant
+                    <div class="node">tree</div>
+                    <div class="node">flower</div>
+                </div>
+                <div class="node">human
+                    <div class="node">American</div>
+                    <div class="node">African</div>
+                </div>
+            </div>
+        </div>
+        <script>
+        //树对象
+        function Tree(ele) {
+            this.root = ele;
+            this.animStack = [];
+        }
+
+        //深度优先遍历
+        Tree.prototype.traverseDF = function(node) {
+            var self = this;
+            (function recurse(node) {
+                self.addToStack(node);
+                for (var i = 0, length = node.children.length; i < length; i++) {
+                    recurse(node.children[i]);
+                }
+            })(self.root);
+        };
+
+        //广度优先遍历
+        Tree.prototype.traverseBF = function() {
+            var queue, currentTree;
+            queue = new Queue();
+            queue.enqueue(this.root);
+            currentTree = queue.dequeue();
+            while (currentTree) {
+                this.addToStack(currentTree);
+                for (var i = 0; i < currentTree.children.length; i++) {
+                    queue.enqueue(currentTree.children[i]);
+                }
+                currentTree = queue.dequeue();
+            }
+        };
+
+        //定义一个队列用于广度优先遍历应用
+        function Queue() {
+            this.queue = [];
+        }
+
+        Queue.prototype.enqueue = function(node) {
+            this.queue.push(node);
+        }
+
+        Queue.prototype.dequeue = function(node) {
+            return this.queue.shift(node);
+        }
+
+
+        //将遍历的节点存入到播放组当中
+        Tree.prototype.addToStack = function(node) {
+            this.animStack.push(node);
+        };
+
+        //遍历动画播放
+        Tree.prototype.showAnimation = function() {
+            var iter = 0;
+            var self = this;
+            var speeder = document.getElementById("speed");
+            speed = speeder.value == 0 ? 200 : speeder.value;
+            self.animStack[iter].style.backgroundColor = "red";
+            var timer = setInterval(function() {
+                if (iter >= self.animStack.length - 1) {
+                    clearInterval(timer)
+                    self.animStack[iter].style.backgroundColor = "#fff";
+                    alert("Travesal finish");
+                } else {
+                    ++iter;
+                    self.animStack[iter - 1].style.backgroundColor = "#fff";
+                    self.animStack[iter].style.backgroundColor = "red";
+                }
+            }, speed);
+
+        };
+
+        //不同遍历方法的按钮
+        function addButtonHandlers() {
+            var self = this;
+            var buttons = document.getElementsByTagName("button");
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].addEventListener("click", function(evt) {
+                    var target = evt.target || window.target;
+                    self.animStack = [];
+                    switch (target.id) {
+                        case "traversalBF":
+                            self.traverseBF();
+                            break;
+                        case "traversalDF":
+                            self.traverseDF();
+                            break;
+                    }
+                    self.showAnimation();
+                }, false);
+            }
+        }
+
+        window.onload = function() {
+            var tree = new Tree(document.getElementById("root"));
+            addButtonHandlers.apply(tree);
+        }
+        </script>
+</body>
+
+</html>
