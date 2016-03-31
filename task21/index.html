@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>task21(兴趣爱好标签)</title>
+    <style>
+    * {
+        font-family: arial, sans-serif;
+    }
+    
+    label {
+        margin-top: 20px;
+    }
+    
+    input {
+        margin: 20px 4px;
+        width: 10em;
+    }
+    
+    .container-tag {
+        margin-bottom: 20px;
+    }
+    
+    .list-tag {
+        margin-top: 0;
+        padding: 0;
+    }
+    
+    .list-tag li {
+        display: inline-block;
+        padding: 2px 5px;
+        height: 1.2em;
+        line-height: 1.2em;
+        font-size: 1em;
+        margin-right: 2px;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.5s;
+    }
+    
+    #listTag1 li {
+        background-color: #84cafe;
+    }
+    
+    #listTag2 li {
+        background-color: #fdc88d;
+    }
+    
+    .list-tag li:hover {
+        background-color: #f00 !important;
+    }
+    
+    .list-tag li:hover:before {
+        content: "点击删除 ";
+    }
+    
+    textarea {
+        display: block;
+        margin-bottom: 20px;
+    }
+    
+    button {
+        margin-bottom: 20px;
+    }
+    </style>
+</head>
+
+<body>
+    <label for="inputTag">Tag:</label>
+    <input type="text" name="tag" id="inputTag">
+    <div class="container-tag">
+        <ul class="list-tag" id="listTag1">
+            <!--  <li>hahahah</li>
+            <li>hahahah</li>
+            <li>hahahah</li>
+            <li>hahahah</li>
+            <li>hahahah</li> -->
+        </ul>
+    </div>
+    <textarea name="hobby" id="inputMultiTag" cols="30" rows="10"></textarea>
+    <button class="confirm" id="confirm">确认兴趣爱好</button>
+    <div class="container-tag">
+        <ul class="list-tag" id="listTag2">
+            <!--             <li>hahahah</li>
+            <li>hahahah</li>
+            <li>hahahah</li>
+            <li>hahahah</li>
+            <li>hahahah</li> -->
+        </ul>
+    </div>
+    <script>
+    function $(element) {
+        if (typeof element != "string") return;
+
+        if (element.indexOf("#") == 0) {
+            return document.getElementById(element.substring(1));
+        }
+
+        if (element.indexOf(".") == 0) {
+            return document.getElementsByClassName(element.substring(1));
+        }
+
+    }
+
+    function initUI() {
+        var MAX_LENGTH = 10;
+        var $inputTag = $("#inputTag");
+        var $listTag1 = $("#listTag1");
+        var $listTag2 = $("#listTag2");
+        var $inputMultiTag = $("#inputMultiTag");
+        var $confirmBtn = $("#confirm");
+        var tagList = [];
+        var endRe = /[;；,，、；  \n\r]+$/; //判断输入栏结束的正则表达式
+        var splitRe = /[;；,，、\s]+/; //区分单词结尾的正则表达式
+
+        $inputTag.addEventListener("keyup", function(evt) { //由于input事件无法响应回车键，因此选用keyup事件
+            evt.preventDefault();
+            var inputValue = $inputTag.value;
+
+
+            if (endRe.test(inputValue) || evt.keyCode == 13) { //keyCode == 13 代表回车键也响应返回
+                var tag = evt.keyCode == 13 ? inputValue.slice(0) : inputValue.slice(0, -1);
+                if (tag.match(/ +$/) || tag == "") return;
+                tagList.push(tag.trim());
+                if (tagList.length > MAX_LENGTH) tagList.shift();
+                renderList.call($listTag1, tagList);
+                $inputTag.value = "";
+            }
+        }, false);
+
+
+        $confirmBtn.addEventListener("click", function() {
+            var tags = getTags($inputMultiTag.value);
+            renderList.call($listTag2, tags);
+        }, false);
+    }
+
+    function renderList(list) {
+        var self = this;
+        self.innerHTML = "";
+        list.forEach(function(item, index) {
+            var itemTag = document.createElement("li");
+            itemTag.innerText = item;
+            self.appendChild(itemTag);
+        })
+    }
+
+    function getTags(str) {
+        var str = str.trim();
+        var output = str.split(splitRe)
+        output.splice(output.indexOf(""), 1);
+        while (output.length > MAX_LENGTH) output.shift();
+        console.log(output);
+        return output;
+    }
+
+
+    window.onload = function() {
+        initUI();
+    };
+    </script>
+</body>
+
+</html>
