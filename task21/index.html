@@ -90,6 +90,10 @@
         </ul>
     </div>
     <script>
+    var MAX_LENGTH = 10;
+    var endRe = /[;；,，、；  \n\r]+$/; //判断输入栏结束的正则表达式
+    var splitRe = /[;；,，、\s]+/; //区分单词结尾的正则表达式
+
     function $(element) {
         if (typeof element != "string") return;
 
@@ -103,16 +107,39 @@
 
     }
 
+    function renderList(list) {
+        var self = this;
+        self.innerHTML = "";
+        list.forEach(function(item, index) {
+            var itemTag = document.createElement("li");
+            itemTag.innerText = item;
+            itemTag.addEventListener("click", function(evt) {
+                var target = evt.target || window.target;
+                self.removeChild(target);
+                list.splice(index, 1);
+            })
+            self.appendChild(itemTag);
+        })
+    }
+
+    function getTags(str) {
+        var str = str.trim();
+        var output = str.split(splitRe);
+        if(output.indexOf("") != -1)  output.splice(output.indexOf(""), 1); //去掉由于split产生的""空元素
+        while (output.length > MAX_LENGTH) output.shift();
+        console.log(output);
+        return output;
+    }
+
+
     function initUI() {
-        var MAX_LENGTH = 10;
         var $inputTag = $("#inputTag");
         var $listTag1 = $("#listTag1");
         var $listTag2 = $("#listTag2");
         var $inputMultiTag = $("#inputMultiTag");
         var $confirmBtn = $("#confirm");
         var tagList = [];
-        var endRe = /[;；,，、；  \n\r]+$/; //判断输入栏结束的正则表达式
-        var splitRe = /[;；,，、\s]+/; //区分单词结尾的正则表达式
+
 
         $inputTag.addEventListener("keyup", function(evt) { //由于input事件无法响应回车键，因此选用keyup事件
             evt.preventDefault();
@@ -134,25 +161,6 @@
             var tags = getTags($inputMultiTag.value);
             renderList.call($listTag2, tags);
         }, false);
-    }
-
-    function renderList(list) {
-        var self = this;
-        self.innerHTML = "";
-        list.forEach(function(item, index) {
-            var itemTag = document.createElement("li");
-            itemTag.innerText = item;
-            self.appendChild(itemTag);
-        })
-    }
-
-    function getTags(str) {
-        var str = str.trim();
-        var output = str.split(splitRe)
-        output.splice(output.indexOf(""), 1);
-        while (output.length > MAX_LENGTH) output.shift();
-        console.log(output);
-        return output;
     }
 
 
