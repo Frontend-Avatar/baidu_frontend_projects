@@ -133,6 +133,10 @@
             this.animStack.push(node.ele);
         };
 
+        BinaryTree.prototype.clearStack = function() {
+            this.animStack = [];
+        };
+
         //遍历动画播放
         BinaryTree.prototype.showAnimation = function() {
             var iter = 0;
@@ -160,6 +164,7 @@
             var buttons = document.getElementsByTagName("button");
             for (var i = 0; i < buttons.length; i++) {
                 buttons[i].addEventListener("click", function(evt) {
+                    self.clearStack();
                     var target = evt.target || window.target;
                     switch (target.id) {
                         case "preTraversal":
