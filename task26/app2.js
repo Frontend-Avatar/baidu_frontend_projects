@@ -6,7 +6,7 @@
 /*   By: caidong <caidong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/07 22:07:33 by caidong           #+#    #+#             */
-/*   Updated: 2016/04/07 23:07:41 by caidong          ###   ########.fr       */
+/*   Updated: 2016/04/08 01:05:34 by caidong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@
                 self.deg += SPACESHIP_SPEED;
                 if (self.deg >= 360) self.deg = 0;
             }, 20);
-            AnimUtil.onDraw(self.mediator.getSpaceships());
+            // AnimUtil.onDraw(self.mediator.getSpaceships());
             ConsoleUtil.show("Spaceship No." + self.id + " is flying.");
         };
 
         var stop = function() {
             clearInterval(self.timer);
-            AnimUtil.onDraw(self.mediator.getSpaceships());
+            // AnimUtil.onDraw(self.mediator.getSpaceships());
             ConsoleUtil.show("Spaceship No." + self.id + " has stop.");
         };
 
@@ -144,7 +144,7 @@
             destroy: function(state) {
                 self.currState = "destroy";
                 self.mediator.remove(self);
-                AnimUtil.onDraw(self.mediator.getSpaceships());
+                // AnimUtil.onDraw(self.mediator.getSpaceships());
             }
         };
 
@@ -201,7 +201,7 @@
     var Mediator = function() {
         var spaceships = [];
         var commander = null;
-
+        var  animUtil = null;
         return {
             /**
              * [register: Only if the object registers in mediator, otherwise they cannot exchange message]
@@ -214,13 +214,16 @@
                     obj.mediator = this;
                     ConsoleUtil.show("mediator register " + "Commander " + obj.id);
                     return true;
-                }
-                if (obj instanceof Spaceship) {
+                } else if (obj instanceof Spaceship) {
                     spaceships[obj.id] = obj;
                     obj.mediator = this;
                     ConsoleUtil.show("mediator register " + "Spaceship " + obj.id);
                     return true;
+                } else if (obj instanceof Object ) {
+                    animUtil = obj;
+                    obj.setMediator(this);
                 }
+
                 ConsoleUtil.show("mediator register failed");
                 return false;
             },
@@ -268,7 +271,7 @@
                 }
                 var spaceship = new Spaceship(msg.id);
                 this.register(spaceship);
-                AnimUtil.onDraw(spaceships);
+                // AnimUtil.onDraw(spaceships);
             },
 
             getSpaceships: function() {
@@ -329,6 +332,10 @@
         cacheCanvas.height = SCREEN_HEIGHT;
         var cacheCtx = cacheCanvas.getContext("2d");
 
+        var mediator = null;
+
+        requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
 
         var drawPlanet = function(_ctx) {
             // ctx.fillStyle = "#1b93ef";
@@ -351,18 +358,17 @@
             }
         };
 
-        var initCanvas = (function() {
-            var canvas =document.createElement("canvas");
+       (function() {
+            var canvas = document.getElementById("background");
             canvas.width = SCREEN_WIDTH;
             canvas.height = SCREEN_HEIGHT;
             var _ctx = canvas.getContext("2d");
             _ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
             drawPlanet(_ctx);
             drawOrbit(_ctx);
-            return canvas;
         })();
-
-
+        
+        
         var drawSpaceship = function(_ctx, spaceship) {
             var spaceshipImg = new Image();
             spaceshipImg.src = "min-iconfont-rocket-active.png";
@@ -387,8 +393,7 @@
                     _ctx.stroke();
                     _ctx.drawImage(spaceshipImg, spaceship.orbit, 0, SPACESHIP_SIZE, SPACESHIP_SIZE);
                     _ctx.restore();
-                    ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-                    ctx.drawImage(initCanvas, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                    ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);  
                     ctx.drawImage(cacheCanvas, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                 } catch (error) {
 
@@ -396,33 +401,36 @@
             };
         };
 
+        var animLoop = function() {
+            requestAnimationFrame(animLoop);
+            onDraw(mediator.getSpaceships());
+        }
+
 
         var onDraw = function(spaceships) {
-            clearInterval(timer);
-            if (spaceships == undefined || spaceships.every(function(item, index, array) {
-                    return item == undefined
-                })) {
+
+            if (!(spaceships == undefined || spaceships.every(function(item, index, array) {
+                    return item == undefined;
+                }))) {
                 cacheCtx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-                ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-                ctx.drawImage(initCanvas, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-            } else {
-                timer = setInterval(function() {
-                    // initSetting(cacheCtx);
-                    cacheCtx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-                    ctx.drawImage(initCanvas, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-                    for (var i = 0; i < spaceships.length; i++) {
-                        if (spaceships[i] !== undefined) {
-                            drawSpaceship(cacheCtx, spaceships[i]);
-                        }
+                for (var i = 0; i < spaceships.length; i++) {
+                    if (spaceships[i] !== undefined) {
+                        drawSpaceship(cacheCtx, spaceships[i]);
                     }
-                }, 30);
+                }
+            } else {
+                ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
             }
+        };
 
+        var setMediator = function(_mediator) {
+            mediator = _mediator
         };
 
         return {
-            onDraw: onDraw
+            setMediator: setMediator,
+            onDraw: onDraw,
+            animLoop: animLoop
         };
     })();
 
@@ -442,8 +450,10 @@
         var commander = new Commander();
         var mediator = new Mediator();
         mediator.register(commander);
+        mediator.register(AnimUtil);
         butttonHandler(commander);
-        AnimUtil.onDraw();
+        AnimUtil.animLoop();
+        // AnimUtil.onDraw();
         // AnimUtil.drawOrbit();
         // AnimUtil.drawSpaceship(75, 0);
         // AnimUtil.drawPlanet();
