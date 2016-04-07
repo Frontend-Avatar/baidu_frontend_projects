@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   app2.js                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: caidong <caidong@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/04/07 22:07:33 by caidong           #+#    #+#             */
+/*   Updated: 2016/04/07 23:07:41 by caidong          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 (function() {
-    var DEFAULT_CHARGE_RATE = 15;
-    var DEFAULT_DISCHARGE_RATE = 10;
+    var DEFAULT_CHARGE_RATE = 0.3;
+    var DEFAULT_DISCHARGE_RATE = 0.2;
     var SCREEN_WIDTH = 800;
     var SCREEN_HEIGHT = 800;
     var SCREEN_CENTER_X = SCREEN_WIDTH / 2;
@@ -9,12 +21,13 @@
     var SPACESHIP_SIZE = 40;
     var SPACESHIP_COUNT = 4;
     var ORBIT_COUNT = 4;
-    var FAILURE_RATE = 0;
+    var FAILURE_RATE = 0.3;
     var POWERBAR_POS_OFFSET = 5;
     var POWERBAR_COLOR_GOOD = "#70ed3f";
     var POWERBAR_COLOR_MEDIUM = "#fccd1f";
     var POWERBAR_COLOR_BAD = "#fb0000";
     var POWERBAR_WIDTH = 5;
+    var SPACESHIP_SPEED = 2;
 
     var $consoleLog = $("#console ul");
 
@@ -39,16 +52,16 @@
         var self = this;
         var fly = function() {
             self.timer = setInterval(function() {
-                self.deg += 1;
+                self.deg += SPACESHIP_SPEED;
                 if (self.deg >= 360) self.deg = 0;
-            }, 10);
-            AnimUtil.onDraw(self.mediator.spaceships);
+            }, 20);
+            AnimUtil.onDraw(self.mediator.getSpaceships());
             ConsoleUtil.show("Spaceship No." + self.id + " is flying.");
         };
 
         var stop = function() {
             clearInterval(self.timer);
-            AnimUtil.onDraw(self.mediator.spaceships);
+            AnimUtil.onDraw(self.mediator.getSpaceships());
             ConsoleUtil.show("Spaceship No." + self.id + " has stop.");
         };
 
@@ -79,9 +92,8 @@
                     return false;
                 }
                 self.power += chargeRate;
-                AnimUtil.updatePower(self.id, self.power);
-                ConsoleUtil.show("Spaceship No." + self.id + " is charging.");
-            }, 1000);
+            }, 20);
+            ConsoleUtil.show("Spaceship No." + self.id + " is charging.");
         };
 
         /**
@@ -103,9 +115,8 @@
                     return false;
                 }
                 self.power -= dischargeRate;
-                AnimUtil.updatePower(self.id, self.power);
-                ConsoleUtil.show("Spaceship No." + self.id + " is discharging.");
-            }, 1000);
+            }, 20);
+            ConsoleUtil.show("Spaceship No." + self.id + " is discharging.");
         };
 
         return {
@@ -133,7 +144,7 @@
             destroy: function(state) {
                 self.currState = "destroy";
                 self.mediator.remove(self);
-                AnimUtil.onDraw(self.mediator.spaceships);
+                AnimUtil.onDraw(self.mediator.getSpaceships());
             }
         };
 
@@ -255,10 +266,6 @@
                     ConsoleUtil.show("Spaceship already exists");
                     return false;
                 }
-                // if (this.spaceships.length >= 4) {
-                //     ConsoleUtil.show("Spaceship is already full.");
-                //     return false;
-                // }
                 var spaceship = new Spaceship(msg.id);
                 this.register(spaceship);
                 AnimUtil.onDraw(spaceships);
@@ -317,85 +324,105 @@
         var ctx = c.getContext("2d");
         var timer = null;
 
-        var drawPlanet = function() {
+        var cacheCanvas = document.createElement("canvas");
+        cacheCanvas.width = SCREEN_WIDTH;
+        cacheCanvas.height = SCREEN_HEIGHT;
+        var cacheCtx = cacheCanvas.getContext("2d");
+
+
+        var drawPlanet = function(_ctx) {
             // ctx.fillStyle = "#1b93ef";
             var x = SCREEN_CENTER_X - PLANET_RADIUS;
             var y = SCREEN_CENTER_Y - PLANET_RADIUS;
             var planet = new Image();
             planet.src = "min-iconfont-planet.png";
             planet.onload = function() {
-                ctx.drawImage(planet, x, y, PLANET_RADIUS * 2, PLANET_RADIUS * 2);
+                _ctx.drawImage(planet, x, y, PLANET_RADIUS * 2, PLANET_RADIUS * 2);
             };
         };
 
-        var drawOrbit = function() {
+        var drawOrbit = function(_ctx) {
             for (var i = 0; i < ORBIT_COUNT; i++) {
-                ctx.strokeStyle = "#999";
-                ctx.beginPath();
-                ctx.arc(SCREEN_CENTER_X, SCREEN_CENTER_Y, 100 + 50 * i, 0, 2 * Math.PI);
-                ctx.closePath();
-                ctx.stroke();
+                _ctx.strokeStyle = "#999";
+                _ctx.beginPath();
+                _ctx.arc(SCREEN_CENTER_X, SCREEN_CENTER_Y, 100 + 50 * i, 0, 2 * Math.PI);
+                _ctx.closePath();
+                _ctx.stroke();
             }
         };
 
-        var initSetting = function() {
-            ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-            drawPlanet();
-            drawOrbit();
-        };
+        var initCanvas = (function() {
+            var canvas =document.createElement("canvas");
+            canvas.width = SCREEN_WIDTH;
+            canvas.height = SCREEN_HEIGHT;
+            var _ctx = canvas.getContext("2d");
+            _ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            drawPlanet(_ctx);
+            drawOrbit(_ctx);
+            return canvas;
+        })();
 
-        // var drawSpaceship = function(x, y) {
-        //     var img = new Image();
-        //     img.src = "iconfont-rocket-active.png";
-        //     img.onload = function() {
-        //         ctx.drawImage(img, x, y, SPACESHIP_SIZE, SPACESHIP_SIZE);
-        //     };
-        // };
 
-        var drawSpaceship = function(spaceship) {
+        var drawSpaceship = function(_ctx, spaceship) {
             var spaceshipImg = new Image();
             spaceshipImg.src = "min-iconfont-rocket-active.png";
-            spaceshipImg.onload = function() { //put ctx into onload function, otherwise it will cause preload problem.
-                ctx.save();
-                ctx.beginPath();
-                if (spaceship.power > 70) {
-                    ctx.strokeStyle = POWERBAR_COLOR_GOOD;
-                } else if (spaceship.power < 70 && spaceship.power > 30) {
-                    ctx.strokeStyle = POWERBAR_COLOR_MEDIUM;
-                } else {
-                    ctx.strokeStyle = POWERBAR_COLOR_BAD;
-                }
-                ctx.lineWidth = POWERBAR_WIDTH;
-                ctx.translate(SCREEN_CENTER_X, SCREEN_CENTER_Y);
-                ctx.rotate(-spaceship.deg * Math.PI / 180);
-                ctx.moveTo(spaceship.orbit, -POWERBAR_POS_OFFSET);
-                ctx.lineTo(spaceship.orbit + SPACESHIP_SIZE * (spaceship.power / 100), -POWERBAR_POS_OFFSET);
-                ctx.stroke();
-                ctx.drawImage(spaceshipImg, spaceship.orbit, 0, SPACESHIP_SIZE, SPACESHIP_SIZE);
-                ctx.restore();
+            spaceshipImg.onload = function() { //put _ctx into onload function, otherwise it will cause preload problem.
+                try {
+                    //change coordinator to center
+                    _ctx.save();
+                    _ctx.translate(SCREEN_CENTER_X, SCREEN_CENTER_Y);
+                    _ctx.rotate(-spaceship.deg * Math.PI / 180);
+                    //Update Power
+                    _ctx.beginPath();
+                    if (spaceship.power > 70) {
+                        _ctx.strokeStyle = POWERBAR_COLOR_GOOD;
+                    } else if (spaceship.power < 70 && spaceship.power > 30) {
+                        _ctx.strokeStyle = POWERBAR_COLOR_MEDIUM;
+                    } else {
+                        _ctx.strokeStyle = POWERBAR_COLOR_BAD;
+                    }
+                    _ctx.lineWidth = POWERBAR_WIDTH;
+                    _ctx.moveTo(spaceship.orbit, -POWERBAR_POS_OFFSET);
+                    _ctx.lineTo(spaceship.orbit + SPACESHIP_SIZE * (spaceship.power / 100), -POWERBAR_POS_OFFSET);
+                    _ctx.stroke();
+                    _ctx.drawImage(spaceshipImg, spaceship.orbit, 0, SPACESHIP_SIZE, SPACESHIP_SIZE);
+                    _ctx.restore();
+                    ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                    ctx.drawImage(initCanvas, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                    ctx.drawImage(cacheCanvas, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                } catch (error) {
+
+                };
             };
         };
 
 
         var onDraw = function(spaceships) {
-            timer = setInterval(function() {
-                initSetting();
-                if (spaceships !== undefined) {
+            clearInterval(timer);
+            if (spaceships == undefined || spaceships.every(function(item, index, array) {
+                    return item == undefined
+                })) {
+                cacheCtx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                ctx.drawImage(initCanvas, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            } else {
+                timer = setInterval(function() {
+                    // initSetting(cacheCtx);
+                    cacheCtx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                    ctx.drawImage(initCanvas, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
                     for (var i = 0; i < spaceships.length; i++) {
                         if (spaceships[i] !== undefined) {
-                            drawSpaceship(spaceships[i]);
+                            drawSpaceship(cacheCtx, spaceships[i]);
                         }
                     }
-                }
-            }, 10);
+                }, 30);
+            }
+
         };
 
         return {
-            onDraw: onDraw,
-            updatePower: function(id, percentage) {
-                var target = "#powerbar" + id;
-                $(target).css("width", percentage + "px");
-            }
+            onDraw: onDraw
         };
     })();
 
