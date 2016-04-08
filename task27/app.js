@@ -1,9 +1,9 @@
 /*
- * @Author: dontry
- * @Date:   2016-04-07 09:55:36
- * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-08 17:43:21
- */
+* @Author: dontry
+* @Date:   2016-04-07 09:55:36
+* @Last Modified by:   dontry
+* @Last Modified time: 2016-04-08 19:08:41
+*/
 
 /**
  * 该设计将飞船划分为动力系统，状态系统，能源系统 以及信号系统，四个模块。  
@@ -34,6 +34,13 @@
     var PLANET_RADIUS = 50; //行星半径
     var ORBIT_COUNT = 4; //轨道数量
     var FAILURE_RATE = 0.3; //消息发送失败率
+    var BUS_FAILURE_RATE = 0.1; //BUS消息发送失败率
+    var BUS_TRANSMIT_SPEED = 300; //BUS消息发送速度
+
+    var LAUNCH_CODE = "00";
+    var FLY_CODE = "01";
+    var STOP_CODE = "10";
+    var DESTROY_CODE = "11";
 
     //根据浏览器类型设置相应的requestAnimationFrame
     requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
@@ -60,7 +67,7 @@
         var fly = function() {
             self.timer = setInterval(function() {
                 self.deg += SPACESHIP_SPEED;
-                if (self.deg >= 360) self.deg = 0; //飞完一圈时，重置角度
+                if (self.deg >= 360) self.deg = 0;  //飞完一圈时，重置角度
             }, 20);
             ConsoleUtil.show("Spaceship No." + self.id + " is flying.");
         };
@@ -173,7 +180,8 @@
     Spaceship.prototype.signalManager = function() {
         var self = this;
         return {
-            receive: function(msg, from) {
+            receive: function(code, from) {
+                var msg = MessageAdapter.decompile(code);
                 if (self.currState != msg.cmd && self.id == msg.id) {
                     self.stateManager().changeState(msg.cmd);
                 }
@@ -239,29 +247,8 @@
              * @return {[type]}      [发送成功返回true，失败返回false]
              */
             send: function(msg, from, to) {
-                setTimeout(function() {
-                    var success = Math.random() > FAILURE_RATE ? true : false; //若随机数大于发送失败率则执行消息发送
-                    if (success) {
-                        if (to) { //unicast
-                            to.receive(msg, from);
-                        } else { //broadcast;
-                            if (msg.cmd == "launch") { //若收到的指令是Launch则执行创建对象
-                                this.create(msg);
-                            }
-                            for (var key in spaceships) {
-                                if (spaceships[key] !== from) { //所有飞船迭代接收消息
-                                    spaceships[key].signalManager().receive(msg, from);
-                                }
-                            }
-
-                        }
-                        ConsoleUtil.show("send success");
-                        return true;
-                    } else {
-                        ConsoleUtil.show("send failed");
-                        return false;
-                    }
-                }, 1000);
+                var code = MessageAdapter.compile(msg);
+                BUS.transmit.apply(this, [code, from, to]);
             },
 
             /**
@@ -310,8 +297,8 @@
      * @param {[type]} target  [消息目标]
      * @param {[type]} command [指令]
      */
-    var Message = function(target, command) {
-        this.id = target;
+    var Message = function(id, command) {
+        this.id = id;
         this.cmd = null;
         switch (command) {
             case "launch":
@@ -321,7 +308,94 @@
                 this.cmd = command;
                 break;
             default:
-                alert("invalid command");
+                alert("Invalid command");
+        }
+    };
+
+    /**
+     * [MessageAdapter 消息适配器]
+     * @type {Object}
+     */
+    var MessageAdapter = {
+        compile: function(msg) {
+            var cmdCode = null;
+            var code = null;
+            switch(msg.cmd) {
+                case "launch":
+                    cmdCode = LAUNCH_CODE;
+                    break;
+                case "fly":
+                    cmdCode = FLY_CODE;
+                    break;
+                case "stop":
+                    cmdCode = STOP_CODE;
+                    break;
+                case "destroy":
+                    cmdCode = DESTROY_CODE;
+                    break;
+                default:
+                    ConsoleUtil.show("Invalid Message");
+            }
+            var idCode = msg.id.toString(2).length < 2 ? "0" + msg.id.toString(2) : msg.id.toString(2);
+            code = idCode + cmdCode;
+            return code;
+        },
+        decompile: function(code) {
+            var idCode = code.substring(0,2);
+            var cmdCode = code.substring(2);
+            var id = parseInt(idCode, 2);
+            var cmd = null;
+            switch(cmdCode) {
+                case LAUNCH_CODE:
+                    cmd = "launch";
+                    break;
+                case FLY_CODE:
+                    cmd = "fly";
+                    break;
+                case STOP_CODE:
+                    cmd = "stop";
+                    break;
+                case DESTROY_CODE:
+                    cmd = "destroy";
+                    break;
+                default:
+                    ConsoleUtil.show("Invalid Code");
+            }
+            return new Message(id, cmd);
+        }
+    };
+
+    //BUS传输介质
+    var BUS = {
+        transmit: function(code, from, to) {
+            var self = this;
+            var spaceships = this.getSpaceships();
+            var timer= null;
+            timer = setInterval(function(){
+                var success = Math.random() > BUS_FAILURE_RATE ? true : false; //若随机数大于发送失败率则执行消息发送
+                if (success) {
+                    clearInterval(timer);
+                    var msg = MessageAdapter.decompile(code);
+                    if (to) { //unicast
+                        to.receive(code, from);
+                    } else { //broadcast;
+                        if (msg.cmd === "launch") { //若收到的指令是Launch则执行创建对象
+                            self.create(msg);
+                        }
+                        for (var key in spaceships) {
+                            if (spaceships[key] !== from) { //所有飞船迭代接收消息
+                                spaceships[key].signalManager().receive(code, from);
+                            }
+                        }
+
+                    }
+                    ConsoleUtil.show("send success");
+                    return true;
+                } else {
+                    ConsoleUtil.show("send failed");
+                    return false;
+                }
+            }, BUS_TRANSMIT_SPEED);
         }
     };
 
@@ -360,14 +434,14 @@
         var canvas = document.getElementById("screen");
         canvas.width = SCREEN_WIDTH;
         canvas.height = SCREEN_HEIGHT;
-        var ctx = canvas.getContext("2d"); //获取屏幕画布
+        var ctx = canvas.getContext("2d");  //获取屏幕画布
 
         var cacheCanvas = document.createElement("canvas");
         cacheCanvas.width = SCREEN_WIDTH;
         cacheCanvas.height = SCREEN_HEIGHT;
         var cacheCtx = cacheCanvas.getContext("2d"); //生成缓存画布
 
-        var timer = null; //定时器
+        var timer = null;  //定时器
         var mediator = null; //控制动画刷新的mediator
 
         /**
@@ -422,14 +496,14 @@
          * @return {[type]}           [绘画成功返回true，失败返回false]
          */
         var drawSpaceship = function(_ctx, spaceship) {
-            var spaceshipImg = new Image(); //创建飞船贴图
-            spaceshipImg.src = "min-iconfont-rocket-active.png";
+            var spaceshipImg = new Image();  //创建飞船贴图
+            spaceshipImg.src = "min-iconfont-rocket-active.png"; 
             spaceshipImg.onload = function() { //当飞船贴图加载后开始在画布上画(由于onload是异步进行的，所以执行顺序上会不是太清晰)
-                try { //由于存在获取不了画布的情况产生错误，因此采用try..catch将错误丢弃
+                try {  //由于存在获取不了画布的情况产生错误，因此采用try..catch将错误丢弃
                     _ctx.save(); //保存画布原有状态
-                    _ctx.translate(SCREEN_CENTER_X, SCREEN_CENTER_Y); //更改画布坐标系，将画布坐标原点移到画布中心
+                    _ctx.translate(SCREEN_CENTER_X, SCREEN_CENTER_Y);  //更改画布坐标系，将画布坐标原点移到画布中心
                     _ctx.rotate(-spaceship.deg * Math.PI / 180); //根据飞船飞行角度进行画布选择
-
+                   
                     //画电量条，根据电量状态改变颜色
                     _ctx.beginPath();
                     if (spaceship.power > 60) {
@@ -446,7 +520,7 @@
 
                     _ctx.drawImage(spaceshipImg, spaceship.orbit, 0, SPACESHIP_SIZE, SPACESHIP_SIZE); //画飞船贴图
                     _ctx.restore(); //恢复画布到原有状态
-                    ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+                    ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);  
                     ctx.drawImage(cacheCanvas, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); //将缓存画布内容复制到屏幕画布上
                     return true;
                 } catch (error) {
@@ -462,10 +536,10 @@
          */
         var onDraw = function(spaceships) {
             if (!(spaceships === undefined || spaceships.every(function(item, index, array) {
-                    return item === undefined; //判断飞船队列是否存在，以及飞船队列是否为空；若不是则执行下面步骤
+                    return item === undefined;  //判断飞船队列是否存在，以及飞船队列是否为空；若不是则执行下面步骤
                 }))) {
                 cacheCtx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); //每次更新清空缓存画布
-                for (var i = 0; i < spaceships.length; i++) { //迭代绘制飞船
+                for (var i = 0; i < spaceships.length; i++) {  //迭代绘制飞船
                     if (spaceships[i] !== undefined) {
                         drawSpaceship(cacheCtx, spaceships[i]);
                     }

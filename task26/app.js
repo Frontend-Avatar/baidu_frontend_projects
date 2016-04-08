@@ -2,7 +2,7 @@
  * @Author: dontry
  * @Date:   2016-04-05 17:30:15
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-08 16:08:23
+ * @Last Modified time: 2016-04-08 17:41:42
  */
 
 (function() {
@@ -239,7 +239,7 @@
                     } else {
                         ConsoleUtil.show("send failed");
                     }
-                }, 50);
+                }, 1000);
             },
 
             remove: function(obj) {
