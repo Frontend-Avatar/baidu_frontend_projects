@@ -1,3 +1,10 @@
+/*
+* @Author: dontry
+* @Date:   2016-04-05 17:30:15
+* @Last Modified by:   dontry
+* @Last Modified time: 2016-04-08 11:18:38
+*/
+
 (function() {
     var DEFAULT_CHARGE_RATE = 2;
     var DEFAULT_DISCHARGE_RATE = 5;
