@@ -2,7 +2,7 @@
 * @Author: dontry
 * @Date:   2016-04-07 09:55:36
 * @Last Modified by:   dontry
-* @Last Modified time: 2016-04-08 11:18:26
+* @Last Modified time: 2016-04-08 16:08:25
 */
 
 /**
@@ -430,9 +430,9 @@
                    
                     //画电量条，根据电量状态改变颜色
                     _ctx.beginPath();
-                    if (spaceship.power > 70) {
+                    if (spaceship.power > 60) {
                         _ctx.strokeStyle = POWERBAR_COLOR_GOOD;
-                    } else if (spaceship.power < 70 && spaceship.power > 30) {
+                    } else if (spaceship.power <= 60 && spaceship.power >= 20) {
                         _ctx.strokeStyle = POWERBAR_COLOR_MEDIUM;
                     } else {
                         _ctx.strokeStyle = POWERBAR_COLOR_BAD;
@@ -517,7 +517,6 @@
         var commander = new Commander();
         var mediator = new Mediator();
         mediator.register(commander);
-        mediator.register(AnimUtil);
         butttonHandler(commander);
         AnimUtil.setMediator(mediator);
         AnimUtil.animLoop();

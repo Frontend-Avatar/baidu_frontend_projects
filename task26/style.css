@@ -1,13 +1,13 @@
 * {
-    font-family: arial, sans-serif;
+    font-family:  arial, helvetica, sans-serif;
 }
 
 .container {
     margin: 0 auto;
     border: 1px solid #000;
+    padding-bottom: 2px;
     width: 1100px;
     height: 950px;
-    padding-bottom: 2px;
 }
 
 .gamepad {
@@ -33,7 +33,9 @@
     border-radius: 50%;
     width: 100px;
     height: 100px;
-    background-color: blue;
+    background: url(min-iconfont-planet.png) no-repeat;
+    background-size: 100px 100px;
+    -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
 
@@ -44,6 +46,7 @@
     z-index: 5;
     border: 1px dashed #999;
     border-radius: 50%;
+    -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
 
@@ -119,36 +122,43 @@
     width: 50px;
     height: 50px;
     /*transform: translate(-50%,-50%);*/
-    background: url(iconfont-rocket.png) no-repeat;
+    background: url(min-iconfont-rocket-active.png) no-repeat;
     background-size: 50px 50px;
 }
 
+
+/*
 .spaceship.active {
-    background-image: url(iconfont-rocket-active.png);
-    animation: circle 5s infinite linear;
-}
+    background-image: url(min-iconfont-rocket-active.png);
+    -webkit-animation: circle 5s infinite linear;
+            animation: circle 5s infinite linear;
+}*/
 
 #spaceship00 {
     top: 350px;
     left: 275px;
+    -webkit-transform-origin: 125px 45px;
     transform-origin: 125px 45px;
 }
 
 #spaceship01 {
     top: 350px;
     left: 225px;
+    -webkit-transform-origin: 175px 45px;
     transform-origin: 175px 45px;
 }
 
 #spaceship02 {
     top: 350px;
     left: 175px;
+    -webkit-transform-origin: 225px 45px;
     transform-origin: 225px 45px;
 }
 
 #spaceship03 {
     top: 350px;
     left: 125px;
+    -webkit-transform-origin: 275px 45px;
     transform-origin: 275px 45px;
 }
 
@@ -174,11 +184,19 @@
     display: inline-block;
     width: 100px;
     height: 5px;
-    background-color: green;
+    background-color: #70ed3f;
+}
+
+@-webkit-keyframes circle {
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes circle {
     to {
+        -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
     }
 }
@@ -194,10 +212,12 @@ ul {
     border: 1px solid #666;
     border-radius: 2px;
     padding: 2px 3px;
-    width: 60px;
+    min-width: 60px;
     text-align: center;
     color: #999;
     cursor: pointer;
+    text-transform: uppercase;
+    font-size: 14px;
 }
 
 .btn:hover {
@@ -220,6 +240,10 @@ ul {
     margin-bottom: 10px;
     font-size: .8em;
     line-height: 1;
+}
+
+.name {
+    text-transform: capitalize;
 }
 
 .console h2 {

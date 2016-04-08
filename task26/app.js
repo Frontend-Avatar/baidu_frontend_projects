@@ -1,33 +1,56 @@
 /*
-* @Author: dontry
-* @Date:   2016-04-05 17:30:15
-* @Last Modified by:   dontry
-* @Last Modified time: 2016-04-08 11:18:38
-*/
+ * @Author: dontry
+ * @Date:   2016-04-05 17:30:15
+ * @Last Modified by:   dontry
+ * @Last Modified time: 2016-04-08 16:08:23
+ */
 
 (function() {
-    var DEFAULT_CHARGE_RATE = 2;
-    var DEFAULT_DISCHARGE_RATE = 5;
-    var $consoleLog = $("#console ul");
+    var SPACESHIP_SPEED = 2; //飞船飞行速度
+    var SPACESHIP_SIZE = 40; //飞船大小
+    var SPACESHIP_COUNT = 4; //飞船数量
+    var DEFAULT_CHARGE_RATE = 0.3; //飞船充电速度
+    var DEFAULT_DISCHARGE_RATE = 0.2; //飞船放电速度
+
+    var POWERBAR_POS_OFFSET = 5; //电量条位置位移
+    var POWERBAR_COLOR_GOOD = "#70ed3f"; //电量良好状态颜色
+    var POWERBAR_COLOR_MEDIUM = "#fccd1f"; //电量一般状态颜色
+    var POWERBAR_COLOR_BAD = "#fb0000"; //电量差状态颜色
+    var POWERBAR_WIDTH = 5; //电量条宽度
+
+    var SCREEN_WIDTH = 800; //屏幕宽度
+    var SCREEN_HEIGHT = 800; //屏幕高度
+    var SCREEN_CENTER_X = SCREEN_WIDTH / 2; //屏幕X轴中心坐标
+    var SCREEN_CENTER_Y = SCREEN_HEIGHT / 2; //屏幕Y轴中心坐标
+
+    var PLANET_RADIUS = 50; //行星半径
+    var ORBIT_COUNT = 4; //轨道数量
+    var FAILURE_RATE = 0.3; //消息发送失败率
 
 
     var Spaceship = function(id) {
         this.id = id;
         this.power = 100;
         this.currState = "stop";
-        this.mediator = null;
-        // this.timer = null;
+        this.orbit = 100 + 50 * id - SPACESHIP_SIZE / 2; //飞船所在轨道的半径
+        this.deg = 0; //飞船初始位置的角度
+        this.timer = null;
     };
 
     //动力系统
     Spaceship.prototype.dynamicManager = function() {
         var self = this;
         var fly = function() {
-            AnimUtil.fly(self.id);
+            self.timer = setInterval(function() {
+                self.deg += SPACESHIP_SPEED;
+                if (self.deg >= 360) self.deg = 0; //飞完一圈时，重置角度
+                AnimUtil.fly(self.id, self.deg);
+            }, 20);
             ConsoleUtil.show("Spaceship No." + self.id + " is flying.");
         };
 
         var stop = function() {
+            clearInterval(self.timer);
             AnimUtil.stop(self.id);
             ConsoleUtil.show("Spaceship No." + self.id + " has stop.");
         };
@@ -42,13 +65,13 @@
     Spaceship.prototype.powerManager = function() {
         var self = this;
         /**
-         * [charge: charge power when stop]
-         * @return {[type]} [description]
+         * [charge: 飞船充电]
+         * @return {[boolean]} [充电返回true]
          */
         var charge = function() {
             var chargeRate = DEFAULT_CHARGE_RATE;
             var timer = setInterval(function() {
-                //if the spaceship is flying or has been destroyed, then stop charging.
+                //若飞船在飞行或者被销毁则不再充电
                 if (self.currState == "fly" || self.currState == "destroy") {
                     clearInterval(timer);
                     return false;
@@ -60,8 +83,8 @@
                 }
                 self.power += chargeRate;
                 AnimUtil.updatePower(self.id, self.power);
-                ConsoleUtil.show("Spaceship No." + self.id + " is charging.");
-            }, 1000);
+            }, 20);
+            ConsoleUtil.show("Spaceship No." + self.id + " is charging.");
         };
 
         /**
@@ -84,8 +107,8 @@
                 }
                 self.power -= dischargeRate;
                 AnimUtil.updatePower(self.id, self.power);
-                ConsoleUtil.show("Spaceship No." + self.id + " is discharging.");
-            }, 1000);
+            }, 20);
+            ConsoleUtil.show("Spaceship No." + self.id + " is discharging.");
         };
 
         return {
@@ -242,6 +265,10 @@
                 var spaceship = new Spaceship(msg.id);
                 this.register(spaceship);
                 AnimUtil.create(msg.id, spaceship.power);
+            },
+
+            getSpaceships: function() {
+                return spaceships;
             }
         };
     };
@@ -287,6 +314,7 @@
 
     //动画工具
     var AnimUtil = (function() {
+        var mediator = null;
         return {
             create: function(id, power) {
                 var target = "#spaceship0" + id;
@@ -297,39 +325,55 @@
                 $(target3).css("width", power + "px");
                 ConsoleUtil.show("create animation");
             },
-            fly: function(id) {
+            fly: function(id, deg) {
+                var mvDeg = "rotate(" + deg + "deg)";
                 var target = "#spaceship0" + id;
-                $(target).addClass("active");
-                ConsoleUtil.show("fly animation");
+                // $(target).addClass("active");
+                $(target).css({
+                    "transform": mvDeg,
+                    "-webkit-transform": mvDeg,
+                });
             },
             stop: function(id) {
                 var target = "#spaceship0" + id;
                 $(target).removeClass("active");
-                ConsoleUtil.show("stop animation");
             },
-            updatePower: function(id, percentage) {
+            updatePower: function(id, power) {
                 var target = "#powerbar" + id;
-                $(target).css("width", percentage + "px");
+                var powerColor = null;
+                if (power > 60) {
+                    powerColor = POWERBAR_COLOR_GOOD;
+                } else if (power <= 60 && power >= 20) {
+                    powerColor = POWERBAR_COLOR_MEDIUM;
+                } else {
+                    powerColor = POWERBAR_COLOR_BAD;
+                }
+                $(target).css({
+                    "width": power + "px",
+                    "background-color": powerColor
+                });
             },
             destroy: function(id) {
                 var target = "#spaceship0" + id;
                 var target2 = "#info" + id;
-                $(target).removeClass("active");
+                // $(target).removeClass("active");
                 $(target).css("display", "none");
                 $(target2).css("display", "none");
-                ConsoleUtil.show("destroy animation");
             }
         };
     })();
 
     //控制台工具
     var ConsoleUtil = (function() {
+        var $consoleLog = $("#console ul");
+        var show = function(msg) {
+            var $msg = $("<li></li>");
+            $msg.text(msg);
+            $consoleLog.prepend($msg);
+        };
+
         return {
-            show: function(msg) {
-                var $msg = $("<li></li>");
-                $msg.text(msg);
-                $consoleLog.prepend($msg);
-            }
+            show: show
         };
     })();
 
