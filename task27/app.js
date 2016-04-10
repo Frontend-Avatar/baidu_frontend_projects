@@ -1,9 +1,9 @@
 /*
-* @Author: dontry
-* @Date:   2016-04-07 09:55:36
-* @Last Modified by:   dontry
-* @Last Modified time: 2016-04-08 19:08:41
-*/
+ * @Author: dontry
+ * @Date:   2016-04-07 09:55:36
+ * @Last Modified by:   dontry
+ * @Last Modified time: 2016-04-10 10:46:24
+ */
 
 /**
  * 该设计将飞船划分为动力系统，状态系统，能源系统 以及信号系统，四个模块。  
@@ -14,11 +14,38 @@
 
 
 (function() {
-    var SPACESHIP_SPEED = 2; //飞船飞行速度
+    var DEFAULT_SPACESHIP_SPEED = 2; //飞船飞行速度
     var SPACESHIP_SIZE = 40; //飞船大小
     var SPACESHIP_COUNT = 4; //飞船数量
     var DEFAULT_CHARGE_RATE = 0.3; //飞船充电速度
     var DEFAULT_DISCHARGE_RATE = 0.2; //飞船放电速度
+
+    var LAUNCH = "launch";
+    var FLY = "fly";
+    var STOP = "stop";
+    var DESTROY = "destroy";
+    var SLOW = "slow";
+    var MEDIUM = "medium";
+    var FAST = "fast";
+
+    var SPACESHIP_SPEED_SLOW = 0.5; //慢速飞行
+    var SPACESHIP_SPEED_MEDIUM = 2; //中速飞行
+    var SPACESHIP_SPEED_FAST = 8; //快速飞行
+
+    var CHARGE_RATE_SLOW = 0.05; //慢速充电
+    var CHARGE_RATE_MEDIUM = 0.3; //中速充电
+    var CHARGE_RATE_FAST = 1; //快速充电
+
+
+    var SPEED_CODE_NULL = "00";
+    var SPEED_CODE_SLOW = "01";
+    var SPEED_CODE_MEDIUM = "10";
+    var SPEED_CODE_FAST = "11";
+
+    var CHARGE_CODE_NULL = "00";
+    var CHARGE_CODE_SLOW = "01";
+    var CHARGE_CODE_MEDIUM = "10";
+    var CHARGE_CODE_FAST = "11";
 
     var POWERBAR_POS_OFFSET = 5; //电量条位置位移
     var POWERBAR_COLOR_GOOD = "#70ed3f"; //电量良好状态颜色
@@ -49,9 +76,11 @@
      * [Spaceship 飞船]
      * @param {[type]} id [飞船id]
      */
-    var Spaceship = function(id) {
+    var Spaceship = function(id, spd, charge) {
         this.id = id;
         this.power = 100; //飞船初始电量
+        this.spd = spd;
+        this.charge = charge;
         this.currState = "stop"; //飞船初始状态
         this.mediator = null; //飞船注册的mediator
         this.orbit = 100 + 50 * id - SPACESHIP_SIZE / 2; //飞船所在轨道的半径
@@ -66,8 +95,8 @@
         var self = this;
         var fly = function() {
             self.timer = setInterval(function() {
-                self.deg += SPACESHIP_SPEED;
-                if (self.deg >= 360) self.deg = 0;  //飞完一圈时，重置角度
+                self.deg += self.spd;
+                if (self.deg >= 360) self.deg = 0; //飞完一圈时，重置角度
             }, 20);
             ConsoleUtil.show("Spaceship No." + self.id + " is flying.");
         };
@@ -91,10 +120,10 @@
          * @return {[boolean]} [充电返回true]
          */
         var charge = function() {
-            var chargeRate = DEFAULT_CHARGE_RATE;
+            var chargeRate = self.charge;
             var timer = setInterval(function() {
                 //若飞船在飞行或者被销毁则不再充电
-                if (self.currState == "fly" || self.currState == "destroy") {
+                if (self.currState == FLY || self.currState == DESTROY) {
                     clearInterval(timer);
                     return false;
                 }
@@ -117,7 +146,7 @@
             var dischargeRate = DEFAULT_DISCHARGE_RATE;
             var timer = setInterval(function() {
                 //若飞船停止或者被销毁则不再放电
-                if (self.currState == "stop" || self.currState == "destroy") {
+                if (self.currState == "stop" || self.currState == DESTROY) {
                     clearInterval(timer);
                     return false;
                 }
@@ -144,7 +173,7 @@
         //istantiate several states of the spaceship
         var states = {
             fly: function(state) {
-                self.currState = "fly";
+                self.currState = FLY;
                 self.dynamicManager().fly();
                 self.powerManager().discharge();
             },
@@ -154,7 +183,7 @@
                 self.powerManager().charge();
             },
             destroy: function(state) {
-                self.currState = "destroy";
+                self.currState = DESTROY;
                 self.mediator.remove(self);
                 // AnimUtil.onDraw(self.mediator.getSpaceships());
             }
@@ -184,7 +213,12 @@
                 var msg = MessageAdapter.decompile(code);
                 if (self.currState != msg.cmd && self.id == msg.id) {
                     self.stateManager().changeState(msg.cmd);
+                    send(msg, DataCenter);
                 }
+            },
+
+            send: function(msg,to) {
+                to.receive(msg);
             }
         };
     };
@@ -277,7 +311,7 @@
                     ConsoleUtil.show("Spaceship already exists");
                     return false;
                 }
-                var spaceship = new Spaceship(msg.id);
+                var spaceship = new Spaceship(msg.id, msg.spd, msg.chrg);
                 this.register(spaceship);
                 return true;
             },
@@ -297,18 +331,20 @@
      * @param {[type]} target  [消息目标]
      * @param {[type]} command [指令]
      */
-    var Message = function(id, command) {
+    var Message = function(id, command, spd_type, chrg_type) {
         this.id = id;
         this.cmd = null;
+        this.spd = spd_type;
+        this.chrg = chrg_type;
         switch (command) {
-            case "launch":
-            case "stop":
-            case "fly":
-            case "destroy":
+            case LAUNCH:
+            case STOP:
+            case FLY:
+            case DESTROY:
                 this.cmd = command;
                 break;
             default:
-                alert("Invalid command");
+                alert("Invalid COMMAND!");
         }
     };
 
@@ -318,50 +354,129 @@
      */
     var MessageAdapter = {
         compile: function(msg) {
+            var idCode = msg.id.toString(2).length < 2 ? "0" + msg.id.toString(2) : msg.id.toString(2);
             var cmdCode = null;
+            var spdCode = null;
+            var chrgCode = null;
             var code = null;
-            switch(msg.cmd) {
-                case "launch":
+            switch (msg.cmd) {
+                case LAUNCH:
                     cmdCode = LAUNCH_CODE;
                     break;
-                case "fly":
+                case FLY:
                     cmdCode = FLY_CODE;
                     break;
-                case "stop":
+                case STOP:
                     cmdCode = STOP_CODE;
                     break;
-                case "destroy":
+                case DESTROY:
                     cmdCode = DESTROY_CODE;
                     break;
                 default:
-                    ConsoleUtil.show("Invalid Message");
+                    ConsoleUtil.show("Invalid CMD Message");
             }
-            var idCode = msg.id.toString(2).length < 2 ? "0" + msg.id.toString(2) : msg.id.toString(2);
-            code = idCode + cmdCode;
-            return code;
-        },
-        decompile: function(code) {
-            var idCode = code.substring(0,2);
-            var cmdCode = code.substring(2);
-            var id = parseInt(idCode, 2);
-            var cmd = null;
-            switch(cmdCode) {
-                case LAUNCH_CODE:
-                    cmd = "launch";
+
+            switch (msg.spd) {
+                case undefined:
+                    spdCode = SPEED_CODE_NULL;
                     break;
-                case FLY_CODE:
-                    cmd = "fly";
+                case SLOW:
+                    spdCode = SPEED_CODE_SLOW;
                     break;
-                case STOP_CODE:
-                    cmd = "stop";
+                case MEDIUM:
+                    spdCode = SPEED_CODE_MEDIUM;
                     break;
-                case DESTROY_CODE:
-                    cmd = "destroy";
+                case FAST:
+                    spdCode = SPEED_CODE_FAST;
                     break;
                 default:
-                    ConsoleUtil.show("Invalid Code");
+                    ConsoleUtil.show("Invalid SPD Message");
             }
-            return new Message(id, cmd);
+
+            switch (msg.chrg) {
+                case undefined:
+                    chrgCode = CHARGE_CODE_NULL;
+                    break;
+                case SLOW:
+                    chrgCode = CHARGE_CODE_SLOW;
+                    break;
+                case MEDIUM:
+                    chrgCode = CHARGE_CODE_MEDIUM;
+                    break;
+                case FAST:
+                    chrgCode = CHARGE_CODE_FAST;
+                    break;
+                default:
+                    ConsoleUtil.show("Invalid CHRG Message");
+            }
+
+            code = idCode + cmdCode + spdCode + chrgCode;
+            ConsoleUtil.show("SENDING CODE:" + code);
+            return code;
+        },
+
+        decompile: function(code) {
+            var idCode = code.substring(0, 2);
+            var cmdCode = code.substring(2, 4);
+            var spdCode = code.substring(4,6);
+            var chrgCode = code.substring(6,8);
+            var id = parseInt(idCode, 2);
+            var cmd = null;
+            var spd = null;
+            var chrg = null;
+            switch (cmdCode) {
+                case LAUNCH_CODE:
+                    cmd = LAUNCH;
+                    break;
+                case FLY_CODE:
+                    cmd = FLY;
+                    break;
+                case STOP_CODE:
+                    cmd = STOP;
+                    break;
+                case DESTROY_CODE:
+                    cmd = DESTROY;
+                    break;
+                default:
+                    ConsoleUtil.show("Invalid CMD Code");
+            }
+
+
+            switch (spdCode) {
+                case SPEED_CODE_NULL:
+                    spd = null;
+                    break;
+                case SPEED_CODE_SLOW:
+                    spd = SPACESHIP_SPEED_SLOW;
+                    break;
+                case SPEED_CODE_MEDIUM:
+                    spd = SPACESHIP_SPEED_MEDIUM;
+                    break;
+                case SPEED_CODE_FAST:
+                    spd = SPACESHIP_SPEED_FAST;
+                    break;
+                default:
+                    ConsoleUtil.show("Invalid SPD Code");
+            }
+
+            switch (chrgCode) {
+                case CHARGE_CODE_NULL:
+                    chrg = null;
+                    break;
+                case CHARGE_CODE_SLOW:
+                    chrg = CHARGE_RATE_SLOW;
+                    break;
+                case CHARGE_CODE_MEDIUM:
+                    chrg = CHARGE_RATE_MEDIUM;
+                    break;
+                case CHARGE_CODE_FAST:
+                    chrg = CHARGE_RATE_FAST;
+                    break;
+                default:
+                    ConsoleUtil.show("Invalid CHRG Code");
+            }
+
+            return new Message(id, cmd, spd, chrg);
         }
     };
 
@@ -370,8 +485,8 @@
         transmit: function(code, from, to) {
             var self = this;
             var spaceships = this.getSpaceships();
-            var timer= null;
-            timer = setInterval(function(){
+            var timer = null;
+            timer = setInterval(function() {
                 var success = Math.random() > BUS_FAILURE_RATE ? true : false; //若随机数大于发送失败率则执行消息发送
                 if (success) {
                     clearInterval(timer);
@@ -379,7 +494,7 @@
                     if (to) { //unicast
                         to.receive(code, from);
                     } else { //broadcast;
-                        if (msg.cmd === "launch") { //若收到的指令是Launch则执行创建对象
+                        if (msg.cmd === LAUNCH) { //若收到的指令是Launch则执行创建对象
                             self.create(msg);
                         }
                         for (var key in spaceships) {
@@ -389,42 +504,14 @@
                         }
 
                     }
-                    ConsoleUtil.show("send success");
+                    ConsoleUtil.show("TRANSMISSION DONE");
                     return true;
                 } else {
-                    ConsoleUtil.show("send failed");
+                    ConsoleUtil.show("TRANSMISSION FAILURE");
                     return false;
                 }
             }, BUS_TRANSMIT_SPEED);
         }
-    };
-
-    /**
-     * [butttonHandler 按钮句柄]
-     * @param  {[type]} commander [点击按钮后，指挥官commander进行相应操作]
-     * @return {[type]}           [指令正确返回true，指令错误返回false]
-     */
-    var butttonHandler = function(commander) {
-        var id = null;
-        var cmd = null;
-        $(".btn").on("click", function() {
-            var cmdName = $(this).attr("name");
-            switch (cmdName) {
-                case "launch":
-                case "fly":
-                case "stop":
-                case "destroy":
-                    id = $(this).parent().index();
-                    cmd = cmdName;
-                    break;
-                default:
-                    alert("invalid command!");
-                    return false;
-            }
-            var message = new Message(id, cmd);
-            commander.send(message);
-            return true;
-        });
     };
 
     /**
@@ -434,14 +521,14 @@
         var canvas = document.getElementById("screen");
         canvas.width = SCREEN_WIDTH;
         canvas.height = SCREEN_HEIGHT;
-        var ctx = canvas.getContext("2d");  //获取屏幕画布
+        var ctx = canvas.getContext("2d"); //获取屏幕画布
 
         var cacheCanvas = document.createElement("canvas");
         cacheCanvas.width = SCREEN_WIDTH;
         cacheCanvas.height = SCREEN_HEIGHT;
         var cacheCtx = cacheCanvas.getContext("2d"); //生成缓存画布
 
-        var timer = null;  //定时器
+        var timer = null; //定时器
         var mediator = null; //控制动画刷新的mediator
 
         /**
@@ -496,14 +583,14 @@
          * @return {[type]}           [绘画成功返回true，失败返回false]
          */
         var drawSpaceship = function(_ctx, spaceship) {
-            var spaceshipImg = new Image();  //创建飞船贴图
-            spaceshipImg.src = "min-iconfont-rocket-active.png"; 
+            var spaceshipImg = new Image(); //创建飞船贴图
+            spaceshipImg.src = "min-iconfont-rocket-active.png";
             spaceshipImg.onload = function() { //当飞船贴图加载后开始在画布上画(由于onload是异步进行的，所以执行顺序上会不是太清晰)
-                try {  //由于存在获取不了画布的情况产生错误，因此采用try..catch将错误丢弃
+                try { //由于存在获取不了画布的情况产生错误，因此采用try..catch将错误丢弃
                     _ctx.save(); //保存画布原有状态
-                    _ctx.translate(SCREEN_CENTER_X, SCREEN_CENTER_Y);  //更改画布坐标系，将画布坐标原点移到画布中心
+                    _ctx.translate(SCREEN_CENTER_X, SCREEN_CENTER_Y); //更改画布坐标系，将画布坐标原点移到画布中心
                     _ctx.rotate(-spaceship.deg * Math.PI / 180); //根据飞船飞行角度进行画布选择
-                   
+
                     //画电量条，根据电量状态改变颜色
                     _ctx.beginPath();
                     if (spaceship.power > 60) {
@@ -520,7 +607,7 @@
 
                     _ctx.drawImage(spaceshipImg, spaceship.orbit, 0, SPACESHIP_SIZE, SPACESHIP_SIZE); //画飞船贴图
                     _ctx.restore(); //恢复画布到原有状态
-                    ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);  
+                    ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
                     ctx.drawImage(cacheCanvas, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); //将缓存画布内容复制到屏幕画布上
                     return true;
                 } catch (error) {
@@ -536,10 +623,10 @@
          */
         var onDraw = function(spaceships) {
             if (!(spaceships === undefined || spaceships.every(function(item, index, array) {
-                    return item === undefined;  //判断飞船队列是否存在，以及飞船队列是否为空；若不是则执行下面步骤
+                    return item === undefined; //判断飞船队列是否存在，以及飞船队列是否为空；若不是则执行下面步骤
                 }))) {
                 cacheCtx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); //每次更新清空缓存画布
-                for (var i = 0; i < spaceships.length; i++) {  //迭代绘制飞船
+                for (var i = 0; i < spaceships.length; i++) { //迭代绘制飞船
                     if (spaceships[i] !== undefined) {
                         drawSpaceship(cacheCtx, spaceships[i]);
                     }
@@ -587,6 +674,58 @@
             show: show
         };
     })();
+
+    /**
+     * [butttonHandler 按钮句柄]
+     * @param  {[type]} commander [点击按钮后，指挥官commander进行相应操作]
+     * @return {[type]}           [指令正确返回true，指令错误返回false]
+     */
+    var butttonHandler = function(commander) {
+        var id = null;
+        var cmd = null;
+        $(".wrapper .btn").on("click", function() {
+            var cmdName = $(this).attr("name");
+            id = $(this).parent().index();
+            cmd = cmdName;
+            switch (cmdName) {
+                case LAUNCH:
+                    $(".panel-option").show();
+                    $(".mask").show();
+                    spaceshipSelection(id, cmd)
+                    return true;
+                case FLY:
+                case STOP:
+                case DESTROY:
+                    var message = new Message(id, cmd);
+                    commander.send(message);
+                    break;
+                default:
+                    alert("INVALID COMMAND!");
+                    return false;
+            }
+            return true;
+        });
+
+        var spaceshipSelection = function(id, cmd) {
+            $("#confirm").on("click", function() {
+                var spd = $("input[type='radio'][name='speed']:checked").val();
+                var chrg = $("input[type='radio'][name='power']:checked").val();
+                $(".panel-option").hide();
+                $(".mask").hide();
+                var message = new Message(id, cmd, spd, chrg);
+                commander.send(message);
+                $("#confirm").off();
+                $("#cancel").off();
+            });
+
+            $("#cancel").on("click", function() {
+                $(".panel-option").hide();
+                $(".mask").hide();
+                $("#confirm").off();
+                $("#cancel").off();
+            });
+        };
+    };
 
     //主线程
     window.onload = function() {

@@ -10,11 +10,10 @@
     display: block;
 }
 
-
 .container {
     margin: 0 auto;
     border: 1px solid #000;
-    width: 1100px;
+    width: 1300px;
     height: 950px;
     padding-bottom: 2px;
 }
@@ -76,11 +75,37 @@ ul {
     margin-bottom: 5px;
 }
 
-.console {
+.wrapper-info {
     float: left;
-    overflow: scroll;
-    width: 300px;
+    width: 500px;
     height: 950px;
+}
+
+.monitor {
+    height: 300px;
+    overflow: auto;
+    text-align: center;
+    border-bottom: 1px solid #333;
+}
+
+.monitor table {
+    box-sizing: border-box;
+    border-collapse: collapse;
+    border: 1px solid #cecece;
+    margin: 0 auto;
+}
+
+.monitor table td,
+.monitor table th {
+    min-width: 50px;
+    border: 1px solid #cecece;
+    padding: 4px 6px;
+    color: #333;
+}
+
+.console {
+    height: 650px;
+    overflow: auto;
 }
 
 .console ul > li {
@@ -147,4 +172,3 @@ ul {
 .btn-wrapper .btn + .btn {
     margin-left: 20px;
 }
-

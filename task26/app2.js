@@ -2,7 +2,7 @@
  * @Author: dontry
  * @Date:   2016-04-07 09:55:36
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-08 17:43:21
+ * @Last Modified time: 2016-04-08 23:43:32
  */
 
 /**
@@ -239,6 +239,7 @@
              * @return {[type]}      [发送成功返回true，失败返回false]
              */
             send: function(msg, from, to) {
+                var self = this;
                 setTimeout(function() {
                     var success = Math.random() > FAILURE_RATE ? true : false; //若随机数大于发送失败率则执行消息发送
                     if (success) {
@@ -246,7 +247,7 @@
                             to.receive(msg, from);
                         } else { //broadcast;
                             if (msg.cmd == "launch") { //若收到的指令是Launch则执行创建对象
-                                this.create(msg);
+                                self.create(msg);
                             }
                             for (var key in spaceships) {
                                 if (spaceships[key] !== from) { //所有飞船迭代接收消息
