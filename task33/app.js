@@ -2,7 +2,7 @@
  * @Author: dontry
  * @Date:   2016-04-12 11:43:45
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-12 14:39:22
+ * @Last Modified time: 2016-04-12 14:54:30
  */
 (function() {
     'use strict';
@@ -82,7 +82,7 @@
         };
 
         function renderBoxPos(x, y) {
-            $box.remove();
+            $box.remove()
             var $td = $("tr")[y].getElementsByTagName("td")[x];
             $td.appendChild($box);
             console.log("box moves to x:" + x + ", y:" + y);
