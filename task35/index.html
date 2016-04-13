@@ -135,27 +135,35 @@
             </tbody>
             <div class="box" id="box"></div>
         </table>
-   <button id="run">执行</button>
-<button id="reset">重置</button>
-<br>
-<div class="console">
-    <ol class="line-numbers" id="lineNum">
-        <li>1 <div id="pointer"></div></li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
-        <li>5</li>
-    </ol>
-    <textarea id="cmds">
-        TUN RIG
-        MOV RIG 2
-        TRA RIG 2
-        TUN BACK
-        GO 2
-    </textarea>
-</div>
-
+        <button id="run">执行</button>
+        <button id="reset">重置</button>
+        <br>
+        <div class="console">
+            <ol class="line-numbers" id="lineNum">
+            </ol>
+            <div id="pointer"></div>
+            <textarea id="cmds">
+            </textarea>
+        </div>
+        <div class="manual">
+            <h2>操作提示</h2>
+            <ul>
+                <li> GO N：向当前方向前进N格</li>
+                <li>TUN LEF：向左旋转</li>
+                <li> TUN RIG：向右旋转 </li>
+                <li> TUN BAC：向后旋转 </li>
+                <li> TRA LEF N：向屏幕的左侧移动N格，方向不变</li>
+                <li>TRA TOP N：向屏幕的上面移动N格，方向不变</li>
+                <li> TRA RIG N：向屏幕的右侧移动N格，方向不变</li>
+                <li> TRA BOT N：向屏幕的下面移动N格，方向不变</li>
+                <li> MOV LEF N：方向转向屏幕左侧，并向屏幕的左侧移动N格</li>
+                <li> MOV TOP N：方向转向屏幕上面，向屏幕的上面移动N格</li>
+                <li> MOV RIG N：方向转向屏幕右侧，向屏幕的右侧移动N格</li>
+                <li> MOV BOT N：方向转向屏幕下面，向屏幕的下面移动N格</li>
+            </ul>
+        </div>
     </div>
+    
     <script src="app.js"></script>
 </body>
 
