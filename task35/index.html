@@ -135,13 +135,26 @@
             </tbody>
             <div class="box" id="box"></div>
         </table>
-    </div>
-    <button id="execute">执行</button>
-    <button id="reset">重置</button>
-    <br>
-    <div class="console">
-        <div class="line-numbers"></div>
-        <textarea id="cmds"></textarea>
+   <button id="run">执行</button>
+<button id="reset">重置</button>
+<br>
+<div class="console">
+    <ol class="line-numbers" id="lineNum">
+        <li>1 <div id="pointer"></div></li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+    </ol>
+    <textarea id="cmds">
+        TUN RIG
+        MOV RIG 2
+        TRA RIG 2
+        TUN BACK
+        GO 2
+    </textarea>
+</div>
+
     </div>
     <script src="app.js"></script>
 </body>

@@ -123,7 +123,7 @@
     }
 
     function getTags(str) {
-        var str = str.trim();
+        str = str.trim();
         var output = str.split(splitRe);
         if(output.indexOf("") != -1)  output.splice(output.indexOf(""), 1); //去掉由于split产生的""空元素
         while (output.length > MAX_LENGTH) output.shift();
