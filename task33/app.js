@@ -2,7 +2,7 @@
  * @Author: dontry
  * @Date:   2016-04-12 11:43:45
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-13 23:28:14
+ * @Last Modified time: 2016-04-14 22:22:45
  */
 (function() {
     'use strict';
@@ -104,7 +104,7 @@
     var turn = 1;
 
 
-
+    //按键控制
     var keyHandler = function() {
         $body.addEventListener("keydown", function(evt) {
             var dir = evt.keyCode;
@@ -113,6 +113,7 @@
         }, false);
     };
 
+    //按钮控制
     var butttonHandler = function() {
         $btnExec.addEventListener("click", function() {
             var val = $cmd.value.toUpperCase();

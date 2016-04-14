@@ -2,7 +2,7 @@
  * @Author: dontry
  * @Date:   2016-04-12 11:43:45
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-13 18:07:50
+ * @Last Modified time: 2016-04-14 20:03:41
  */
 (function() {
     'use strict';
@@ -25,6 +25,7 @@
     var cmdReg = /[\w\d]+/g;
     var numReg = /\d+/;
 
+    //模拟jquery获取元素
     function $(element) {
         if (typeof element != "string") return;
 
@@ -40,15 +41,28 @@
 
     }
 
+    /**
+     * [Box 定义方块对象]
+     * @param {[type]} x   [横坐标]
+     * @param {[type]} y   [纵坐标]
+     * @param {[type]} dir [方块方向]
+     */
     function Box(x, y, dir) {
         this.dir = dir || 0;
         this.x = x || 0;
         this.y = y || 0;
     };
 
+    /**
+     * [play 播放方块动画]
+     * @param  {[type]} dir  [方向]
+     * @param  {[type]} cmd  [指令]
+     * @param  {[type]} step [步进]
+     * @return {[type]}      [description]
+     */
     Box.prototype.play = function(dir, cmd, step) {
         var self = this;
-        switch (cmd) {
+        switch (cmd) {    //根据指令执行相应函数
             case "GO":
                 go(step);
                 break;
