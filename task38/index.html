@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>task38</title>
+    <style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+    
+    body {
+        font-family: verdana;
+        font-size: 12px;
+    }
+    
+    .content {
+        width: 550px;
+        margin: 20px auto;
+    }
+    
+    .content h1 {
+        font-family: 'Microsoft Yahei';
+        font-size: 18px;
+        padding-bottom: 5px;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    th,
+    td {
+        border: 3px solid #ddd;
+        padding: 5px;
+        text-align: center;
+    }
+    
+    th {
+        background-color: #333;
+        color: #fff;
+    }
+    
+    tr {
+        background-color: #fff;
+    }
+    
+    .sort {
+        display: inline-block;
+        width: auto;
+        height: 100%;
+        vertical-align: middle;
+        margin-left: 8px;
+    }
+    
+    .icon-asc {
+        width: 0;
+        height: 0;
+        border-top: 5px solid transparent;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 5px solid #fff;
+        margin-bottom: 5px;
+    }
+    
+    .icon-des {
+        width: 0;
+        height: 0;
+        border-top: 5px solid #fff;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+    }
+    </style>
+</head>
+
+<body>
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th data-index="0"><span>姓名</span><span class="sort" style="display:none"><div class="icon-asc"></div><div class="icon-des"></div></th>
+                <th data-index="1"><span>语文</span><span class="sort"><div class="icon-asc"></div><div class="icon-des"></div></span>
+                </th>
+                <th data-index="2"><span>数学</span><span class="sort"><div class="icon-asc"></div><div class="icon-des"></div></span>
+                </th>
+                <th data-index="3"><span>英语</span><span class="sort"><div class="icon-asc"></div><div class="icon-des"></div></span>
+                </th>
+                <th data-index="4"><span>总分</span><span class="sort"><div class="icon-asc"></div><div class="icon-des"></div></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>晓明</td>
+                <td>80</td>
+                <td>90</td>
+                <td>70</td>
+                <td>240</td>
+            </tr>
+            <tr>
+                <td>小红</td>
+                <td>90</td>
+                <td>60</td>
+                <td>90</td>
+                <td>240</td>
+            </tr>
+            <tr>
+                <td>小亮</td>
+                <td>60</td>
+                <td>100</td>
+                <td>70</td>
+                <td>230</td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+    var table = document.querySelector("#myTable");
+    var tbody = table.tBodies[0];
+    var tr = tbody.rows;
+    var $sortAscIcon = document.querySelectorAll(".icon-asc");
+    var $sortDesIcon = document.querySelectorAll(".icon-des");
+
+    function sortTable(Idx, method) {
+        var itemTr = [];
+        for (var i = 0; i < tr.length; i++) {
+            itemTr[i] = tr[i];
+        }
+
+        itemTr.sort(function(item1, item2) {
+            var val1 = parseInt(item1.cells[Idx].innerText);
+            var val2 = parseInt(item2.cells[Idx].innerText);
+            return val1 - val2 >=0 ? 1 : -1;
+        });
+
+        if (method === "SORT_ASC") itemTr.reverse();
+
+
+        var fragment = document.createDocumentFragment();
+        for (var i = 0; i < itemTr.length; i++) {
+            fragment.appendChild(itemTr[i]);
+        }
+        tbody.appendChild(fragment);
+    }
+
+    for (var i = 0; i < $sortAscIcon.length; i++) {
+        $sortAscIcon[i].onclick = (function(idx){
+            return function(){
+                var method = "SORT_ASC";
+                sortTable(idx, method);
+            };
+        })(i);
+      
+        $sortDesIcon[i].onclick = (function(idx){
+            return function(){
+                var method = "SORT_DES";
+                sortTable(idx, method);
+            }
+        })(i);
+    }
+    </script>
+</body>
+
+</html>
