@@ -2,7 +2,7 @@
  * @Author: dontry
  * @Date:   2016-04-12 11:43:45
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-13 18:07:50
+ * @Last Modified time: 2016-04-19 11:10:11
  */
 (function() {
     'use strict';
@@ -22,8 +22,8 @@
     var $lineNum = $("#lineNum");
     var $pointer = $("#pointer");
     var box = new Box(0, 0);
-    var cmdReg = /[\w\d]+/g;
-    var numReg = /\d+/;
+    var cmdReg = /[\w\d]+/g; //匹配命令
+    var numReg = /\d+/; //匹配距离数字
 
     function $(element) {
         if (typeof element != "string") return;
@@ -46,6 +46,12 @@
         this.y = y || 0;
     };
 
+    /**
+     * [play 根据输入命令的方向及动作播放动画]
+     * @param  {[type]} dir [方向]
+     * @param  {[type]} cmd [命令]
+     * @return {[type]}     [description]
+     */
     Box.prototype.play = function(dir, cmd, step) {
         var self = this;
         switch (cmd) {
@@ -63,6 +69,7 @@
                 break;
         }
 
+        //将命令分解为改变方向和移动距离
         function go(step) {
             updatePos.call(self, step);
         }
@@ -82,6 +89,8 @@
             },500);
         }
 
+
+        //更新位置
         function updatePos(step) {
             switch (dir) {
                 case LEFT:
@@ -120,36 +129,47 @@
         }
 
 
-
+        //更新方向
         function updateBoxDir(dir) {
             this.dir = dir;
             renderBoxDir(this.dir)
         }
 
+        //根据坐标渲染方块位置
         function renderBoxPos(x, y) {
             $box.style.left = x * TILE_SIZE + "px";
             $box.style.top = y * TILE_SIZE + "px";
         }
 
+        //根据方向渲染方块朝向
         function renderBoxDir(dir) {
             $box.style.transform = "rotate(" + dir + "deg)";
             console.log("change direction:" + dir);
         }
     };
 
-
+    /**
+     * [getLines 获得每行命令]
+     * @param  {[type]} str [命令行输入的字符串]
+     * @return {[type]}     [description]
+     */
     function getLines(str) {
         str = str.trim();
         return str.split("\n");
     }
 
+    /**
+     * [executeCmd 执行命令]
+     * @param  {[type]} line [命令行]
+     * @return {[boolean]}      [合法指令返回true，非法指令返回false]
+     */
     function executeCmd(line) {
         // line = line.trim();
-        var linePart = line.match(cmdReg);
-        var lineAct = null;
-        var cmd = null;
+        var linePart = line.match(cmdReg); //将命令行里的单词转化为数组
+        var lineAct = null; //命令行里代表的动作指令(包括方向)，例如：GO, TUN LEF, TRA BOT
+        var cmd = null; //不包括方向的单纯动作指令
         try {
-            cmd = linePart[0];
+            cmd = linePart[0]; 
         } catch(error) {
             return false;
         }
@@ -157,6 +177,7 @@
         var step = null;
         var turn = 0;
 
+        //判断指令第二个单词是否为数字，例如像GO 2这样的指令;
         if (numReg.test(linePart[1])) {
             step = parseInt(linePart[1]);
             lineAct = cmd;
@@ -196,33 +217,32 @@
                 console.log("INVALID CMD");
                 return false;
         }
-        dir = (cmd == "TUN" || cmd == "GO") ? box.dir + turn * 90 : dir;
+        dir = (cmd == "TUN" || cmd == "GO") ? box.dir + turn * 90 : dir; //判断方块方向
         box.play(dir, cmd, step);
         return true;
     }
 
+    //按下“执行”按钮后开始执行指令
     var butttonHandler = function() {
         $btnRun.addEventListener("click", function() {
             var str = $cmd.value.toUpperCase();
-            var dir = LEFT;
-            var lines = getLines(str);
+            var lines = getLines(str);  //获得每行指令并存到数组中
             var $li = $lineNum.getElementsByTagName("li");
-            // lines.forEach(function(item, index) {
-            //     // setTimeout(executeCmd(item), 1000);
-            //     // executeCmd(item);
-            // });
+
             var iter = 0;
+            //以每秒一行的速度执行指令
             var timer = setInterval(function() {
                 if (iter >= lines.length || (lines.length == 1 && lines[0] == "")) {
                     clearInterval(timer);
                     return false;
                 }
-                if (!executeCmd(lines[iter])) $li[iter].className = "error";
-                $li[iter].appendChild($pointer);
+                if (!executeCmd(lines[iter])) $li[iter].className = "error"; //若非法指令则将其标红
+                $li[iter].appendChild($pointer); //改变执行指针位置
                 iter++;
             }, 1000);
         });
 
+        //重置按钮，清除命令输入框，方块回到初始状态。
         $btnReset.addEventListener("click", function() {
             $lineNum.innerHTML = ""
             $cmd.value = "";
@@ -230,12 +250,12 @@
             $box.style.left = 0;
             $box.style.transform = "rotate(0deg)";
             box = new Box(0, 0);
-        })
+        });
     };
 
 
 
-
+    //输入框事件控制器
     var textareaHandler = function() {
         $cmd.addEventListener("keydown", function(evt) {
             updateLineNum();
@@ -244,13 +264,14 @@
 
         $cmd.addEventListener("keyup", function(evt) {
             updateLineNum();
-        })
+        });
 
         $cmd.addEventListener("scroll", function() {
             syncScroll();
-        })
+        });
     }
 
+    //更新行数序号
     function updateLineNum() {
         var lines = getLines($cmd.value);
         $lineNum.innerHTML = "";
@@ -261,11 +282,13 @@
         }
     }
 
+    //当输入框滚动时，行数序号刷新对齐
     function syncScroll() {
         var $li = $lineNum.getElementsByTagName("li");
         $li[0].style.marginTop = -$cmd.scrollTop + "px";
     }
 
+    //子节点个数
     function nodeLength(ele) {
         var length = 0;
         for (var i = 0; i < ele.childNodes.length; i++) {

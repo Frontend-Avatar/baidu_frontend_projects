@@ -2,7 +2,7 @@
  * @Author: dontry
  * @Date:   2016-04-12 10:29:56
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-12 11:07:20
+ * @Last Modified time: 2016-04-19 10:31:19
  */
 
 
@@ -64,14 +64,15 @@
 
     ];
 
-    var $radioBoxes = $(".radio");
-    var $selectCity = $("#city");
-    var $selectSchool = $("#school");
-    var $formgroupNonstudent = $("#formgroupNonstudent");
-    var $formgroupStudent = $("#formgroupStudent");
-    var $optionCity = $selectCity.getElementsByTagName("option");
-    var $optionSchool = $selectSchool.getElementsByClassName("option");
+    var $radioBoxes = $(".radio"); //单选框
+    var $selectCity = $("#city"); //城市选择
+    var $selectSchool = $("#school"); //学校选择
+    var $formgroupNonstudent = $("#formgroupNonstudent"); //非在校生表单
+    var $formgroupStudent = $("#formgroupStudent"); //在校生表单
+    var $optionCity = $selectCity.getElementsByTagName("option"); //城市选择列表
+    var $optionSchool = $selectSchool.getElementsByClassName("option"); //学校选择列表
 
+    //单选框事件控制器
     var radioHandler = function() {
         for (var i = 0; i < $radioBoxes.length; i++) {
             $radioBoxes[i].addEventListener("click", function() {
@@ -88,10 +89,12 @@
         }
     };
 
-
+    //设置选择列表的事件控制器
     var selectHandler = function() {
         $selectCity.innerHTML = "";
         var arr = [];
+
+        //添加城市选项
         for (var i = 0; i < list.length; i++) {
             var option = document.createElement("option");
             option.innerHTML = list[i].text;
@@ -99,6 +102,7 @@
             $selectCity.appendChild(option);
         }
 
+        //当点击城市后，添加相应呃学校选择列表
         $selectCity.addEventListener("click", function() {
             $selectSchool.innerHTML = "";
             for (var i = 0; i < list.length; i++) {
@@ -111,13 +115,14 @@
                     }
                 }
             }
-        })
+        });
     };
 
+    //主线程
     window.onload = function() {
         radioHandler();
         selectHandler();
-    }
+    };
 
 
 })();

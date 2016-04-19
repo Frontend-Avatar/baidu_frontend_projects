@@ -2,10 +2,22 @@
  * @Author: dontry
  * @Date:   2016-04-12 11:43:45
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-13 23:28:14
+ * @Last Modified time: 2016-04-19 10:46:59
+ */
+
+/**
+ * [该小方块能够同时识别键盘方向键以及输入框的命令]
+ * @return {[type]} [description]
  */
 (function() {
     'use strict';
+
+    //根据将键盘方向键与方向对应起来
+    var LEFT = 37;
+    var UP = 38;
+    var RIGHT = 39;
+    var DOWN = 40;
+    var BOUNDARY = 9;  //边界位置
 
     function $(element) {
         if (typeof element != "string") return;
@@ -28,6 +40,12 @@
         this.y = y || 0;
     };
 
+    /**
+     * [play 根据输入命令的方向及动作播放动画]
+     * @param  {[type]} dir [方向]
+     * @param  {[type]} cmd [命令]
+     * @return {[type]}     [description]
+     */
     Box.prototype.move = function(dir) {
         if (this.prevDirection != dir) {
             this.prevDirection = dir;
@@ -58,6 +76,7 @@
             renderBoxPos(this.x, this.y);
         }
 
+        //渲染方块的方向
         function renderBoxDir(dir) {
             var deg = 0;
             switch (dir) {
@@ -81,18 +100,13 @@
             console.log("change direction:" + dir);
         };
 
+        //渲染方块的位置，由于采用了将方块放到不同格子中改变位置，因此缺少移动动画。
         function renderBoxPos(x, y) {
             var $td = $tbody.rows[y].cells[x];
             $td.appendChild($box);
             console.log("box moves to x:" + x + ", y:" + y);
         };
     };
-
-    var LEFT = 37;
-    var UP = 38;
-    var RIGHT = 39;
-    var DOWN = 40;
-    var BOUNDARY = 9;
 
     var $board = $("#board");
     var $box = $("#box");
@@ -101,10 +115,10 @@
     var $btnExec = $("#execute");
     var $tbody = $board.tBodies[0];
     var box = new Box(0, 0);
-    var turn = 1;
+    var turn = 1;  //通过一个turn变量持续记录方块旋转90度的次数，正数为顺时针，负数为逆时针
 
 
-
+    //响应键盘事件
     var keyHandler = function() {
         $body.addEventListener("keydown", function(evt) {
             var dir = evt.keyCode;
@@ -113,6 +127,7 @@
         }, false);
     };
 
+    //当输入框输入命令后，按“执行”按钮执行相应命令
     var butttonHandler = function() {
         $btnExec.addEventListener("click", function() {
             var val = $cmd.value.toUpperCase();
@@ -131,8 +146,8 @@
                 default: 
                     console.log("INVALID CMD");
             }
-            turn = turn%4 >= 0 ? turn%4 : 4+(turn%4);
-            var dir = LEFT + turn;
+            turn = turn%4 >= 0 ? turn%4 : 4+(turn%4);  //通过取模运算判断旋转后的方向
+            var dir = LEFT + turn; //由于为方便计算LEFT为最小值，而方块初始方向是向上，因此turn设为1，校正方块初始值
             box.move(dir);
         });
     };
