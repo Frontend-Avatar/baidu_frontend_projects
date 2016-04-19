@@ -2,7 +2,7 @@
  * @Author: dontry
  * @Date:   2016-04-12 11:43:45
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-12 14:54:30
+ * @Last Modified time: 2016-04-13 23:28:14
  */
 (function() {
     'use strict';
@@ -82,8 +82,7 @@
         };
 
         function renderBoxPos(x, y) {
-            $box.remove()
-            var $td = $("tr")[y].getElementsByTagName("td")[x];
+            var $td = $tbody.rows[y].cells[x];
             $td.appendChild($box);
             console.log("box moves to x:" + x + ", y:" + y);
         };
@@ -100,6 +99,7 @@
     var $body = document.getElementsByTagName("body")[0];
     var $cmd = $("#cmd");
     var $btnExec = $("#execute");
+    var $tbody = $board.tBodies[0];
     var box = new Box(0, 0);
     var turn = 1;
 
