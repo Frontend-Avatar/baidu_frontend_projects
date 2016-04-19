@@ -2,7 +2,7 @@
  * @Author: dontry
  * @Date:   2016-04-07 09:55:36
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-10 21:40:33
+ * @Last Modified time: 2016-04-15 21:23:52
  */
 
 /**
@@ -227,25 +227,7 @@
         };
 
 
-        /**
-         * [Commander 指挥官，负责单向指令发送，不接收外界消息]
-         */
-        var Commander = function() {
-            this.id = "Don";
-            this.cmds = [];
-            this.mediator = null;
-        };
-
-        /**
-         * [send 发送指令，并将指令压入指令历史cmds中]
-         * @param  {[type]} msg [消息]
-         * @return {[type]}     [description]
-         */
-        Commander.prototype.send = function(msg) {
-            this.mediator.send(msg);
-            this.cmds.push(msg);
-        };
-
+      
 
         /**
          * [Mediator Mediator的作用是让不同对象进行消息传递，并保存更新飞船队列数据；该对象把
@@ -813,7 +795,7 @@
                     return false;
             }
             return true;
-        });
+        }); 
 
         var spaceshipSelection = function(id, cmd) {
             $("#confirm").on("click", function() {

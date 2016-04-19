@@ -1,0 +1,32 @@
+{
+  "name": "planet_spaceships",
+  "version": "1.0.0",
+  "description": "a mini game of planet & spaceships",
+  "main": "entry.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.prod.js",
+    "dev": "webpack-dev-server --config webpack.config.dev.js"
+  },
+  "keywords": [
+    "game;",
+    "module;",
+    "pattern",
+    "design"
+  ],
+  "author": "dontry",
+  "license": "MIT",
+  "devDependencies": {
+    "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
+    "gulp": "^3.9.1",
+    "html-webpack-plugin": "^2.15.0",
+    "jquery": "^2.2.3",
+    "sass-loader": "^3.2.0",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.15",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
