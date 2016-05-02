@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>问卷管理</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles/common.css">
+    <link rel="stylesheet" href="../styles/index.css">
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../scripts/index.js"></script>
+</head>
+
+<body>
+    <div class="modal" id="dialog-delete">
+    	<div class="modal-dialog">
+    		<div class="modal-content">
+    			<div class="modal-header">
+    				<button type="button" data-dismiss="modal" aria-label="Close" class="close">
+    					<span aria-hidden="true">&times;</span>
+    				</button>
+    				<h4 class="modal-title">提示</h4>
+    			</div>
+    			<div class="modal-body">
+    				确认要删除此问卷？
+    			</div>
+    			<div class="modal-footer">
+    				<button type="button" class="btn-default btn">确认</button>
+    				<button type="button" class="btn-default btn" data-dismiss="modal">取消</button>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <h2>问卷管理</h2>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <section class="main">
+        <table>
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>标题</td>
+                    <td>时间</td>
+                    <td>状态</td>
+                    <td>操作
+                        <div class="btn btn-default create"><strong>+</strong> 新建问卷</div>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="radio" name="survey1">
+                    </td>
+                    <td class="title">
+                        第一份问卷</td>
+                    <td class="time">2016.4.12</td>
+                    <td class="status"><span class="publishing">发布中</span></td>
+                    <td class="action">
+                        <div class="btn btn-default">编辑</div>
+                        <div class="btn btn-default delete"  data-toggle="modal" data-target="dialog-delete">删除</div>
+                        <div class="btn btn-default">查看数据</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="survey2">
+                    </td>
+                    <td class="title">第一份问卷</td>
+                    <td class="time">2016.4.12</td>
+                    <td class="status"><span class="unpublished">未发布</span></td>
+                    <td class="action">
+                        <div class="btn btn-default">编辑</div>
+                        <div class="btn btn-default delete" data-toggle="modal" data-target="dialog-delete">删除</div>
+                        <div class="btn btn-default">查看数据</div>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <span><input type="radio" name="all">全选</span>
+                        <div class="btn btn-default">删除</div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </section>
+</body>
+
+</html>

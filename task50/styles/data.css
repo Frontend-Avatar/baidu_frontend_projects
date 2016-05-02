@@ -1,0 +1,57 @@
+/*
+* @Author: dontry
+* @Date:   2016-05-01 23:16:32
+* @Last Modified by:   dontry
+* @Last Modified time: 2016-05-02 00:37:26
+*/
+.analysis-container {
+  background-color: #fff;
+  box-shadow: 0px 5px 2px 2px #cecece;
+  padding: 8px 16px;
+  width: 800px;
+  margin: 0 auto; }
+
+.analysis-head {
+  position: relative;
+  text-align: center; }
+  .analysis-head .btn {
+    position: absolute;
+    top: 0;
+    left: 0; }
+
+.analysis-body .question {
+  width: 700px;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding: 10px; }
+.analysis-body table tr {
+  height: 2em; }
+.analysis-body table td:first-child {
+  width: 30px; }
+.analysis-body table td.option {
+  width: 300px; }
+.analysis-body table td.ratio .bar {
+  display: inline-block;
+  position: relative;
+  width: 200px;
+  height: 10px;
+  border: 1px solid #ddd;
+  margin-right: 10px; }
+  .analysis-body table td.ratio .bar span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    background-color: #eb9230;
+    width: 85%;
+    height: 100%; }
+
+.analysis-foot {
+  text-align: center;
+  padding-bottom: 30px; }
+  .analysis-foot .btn {
+    background-color: #eb9230;
+    color: #fff; }
+
+/*# sourceMappingURL=data.css.map */

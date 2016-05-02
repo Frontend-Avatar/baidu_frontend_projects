@@ -1,0 +1,176 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, Tahoma, Arial;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 1200px;
+    height: 800px;
+    margin: 40px auto;
+    overflow: hidden;
+}
+
+.container-photo {
+    display: none;
+    position: relative;
+    width: 1200px;
+    height: 800px;
+    overflow: hidden;
+}
+
+.box-photo {
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.box-photo img {
+    width: 100%;
+    height: 100%;
+}
+
+.box-photo .content {
+    position: absolute;
+    bottom: 0;
+    color: #fff;
+}
+
+.container-photo1 {
+    display: block;
+}
+
+.container-photo1 .box-photo {
+    width: 100%;
+    height: 100%;
+}
+
+.container-photo2 .box-photo {
+    position: absolute;
+}
+
+.container-photo2 .box-photo:nth-child(1) {
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 66.6%;
+    height: 100%;
+    -webkit-clip-path: polygon(0 0, 100% 0, 50% 100%, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 50% 100%, 0 100%);
+}
+
+.container-photo2 .box-photo:nth-child(2) {
+    top: 0;
+    right: 0;
+    width: 66.6%;
+    height: 100%;
+}
+
+.container-photo2 .box-photo:nth-child(2) .content {
+    right: 0;
+}
+
+.container-photo3 .box-photo {
+    float: left;
+}
+
+.container-photo3 .box-photo:nth-child(1) {
+    width: 66.6%;
+    height: 100%;
+}
+
+.container-photo3 .box-photo:nth-child(2),
+.container-photo3 .box-photo:nth-child(3) {
+    width: 33.4%;
+    height: 50%;
+}
+
+.container-photo4 .box-photo {
+    float: left;
+    width: 50%;
+    height: 50%;
+}
+
+.container-photo5 .box-photo {
+    position: absolute;
+}
+
+.container-photo5 .box-photo:nth-child(1) {
+    top: 0;
+    left: 0;
+    width: 66.6%;
+    height: 66.6%;
+}
+
+.container-photo5 .box-photo:nth-child(2) {
+    top: 0;
+    left: 66.6%;
+    width: 33.4%;
+    height: 33.4%;
+}
+
+.container-photo5 .box-photo:nth-child(3) {
+    left: 0;
+    top: 66.6%;
+    width: 33.3%;
+    height: 33.4%;
+}
+
+.container-photo5 .box-photo:nth-child(4) {
+    left: 33.3%;
+    top: 66.6%;
+    width: 33.3%;
+    height: 33.4%;
+}
+
+.container-photo5 .box-photo:nth-child(5) {
+    top: 33.4%;
+    left: 66.6%;
+    width: 33.4%;
+    height: 66.6%;
+}
+
+.container-photo6 .box-photo:first-child {
+    float: left;
+    width: 66.6%;
+    height: 66.6%;
+}
+
+.container-photo6 .box-photo:nth-child(2),
+.container-photo6 .box-photo:nth-child(3) {
+    float: right;
+    width: 33.4%;
+    height: 33.3%;
+}
+
+.container-photo6 .box-photo:nth-child(5),
+.container-photo6 .box-photo:nth-child(6) {
+    float: right;
+    width: 33.3%;
+    height: 33.4%;
+}
+
+.container-photo6 .box-photo:nth-child(4) {
+    float: right;
+    width: 33.4%;
+    height: 33.4%;
+}
+
+.btn-group {
+    width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.btn-group button {
+    width: 50px;
+    height: 24px;
+}
+
+.btn-group button + button {
+    margin-left: 30px;
+}
+
+
+/*# sourceMappingURL=style.css.map */

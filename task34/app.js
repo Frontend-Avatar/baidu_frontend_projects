@@ -2,7 +2,7 @@
  * @Author: dontry
  * @Date:   2016-04-12 11:43:45
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-12 16:24:18
+ * @Last Modified time: 2016-04-19 10:46:24
  */
 (function() {
     'use strict';
@@ -12,7 +12,7 @@
     var RIGHT = 39;
     var DOWN = 40;
     var BOUNDARY = 9;
-    var TILE_SIZE = 41;
+    var TILE_SIZE = 41; //方块移动一格的像素个数
 
     var $board = $("#board");
     var $box = $("#box");
@@ -44,6 +44,12 @@
         this.y = y || 0;
     };
 
+    /**
+     * [play 根据输入命令的方向及动作播放动画]
+     * @param  {[type]} dir [方向]
+     * @param  {[type]} cmd [命令]
+     * @return {[type]}     [description]
+     */
     Box.prototype.play = function(dir, cmd) {
         var self = this;
         switch (cmd) {
@@ -60,6 +66,7 @@
                 move(dir);
                 break;
 
+                //将命令分解为改变方向和移动距离
                 function go(dir) {
                     updatePos.call(self, 1);
                 }
@@ -144,7 +151,7 @@
             $box.style.left = x * TILE_SIZE + "px";
             $box.style.top = y * TILE_SIZE + "px";
         }
-    }
+    };
 
 
 
@@ -198,7 +205,7 @@
                     console.log("INVALID CMD");
             }
             turn = turn % 4 >= 0 ? turn % 4 : 4 + (turn % 4);
-            dir = cmd == "TUN" ? LEFT + turn : dir;
+            dir = cmd == "TUN" ? LEFT + turn : dir; //根据命令判断是否需要改变方块方向
             box.play(dir, cmd);
         });
     };

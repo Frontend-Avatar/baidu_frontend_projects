@@ -4,12 +4,19 @@
     var pwdReg = /^[\d|\w]{8,16}$/;
     var mobileReg = /^0?(13[0-9]|15[012356789]|18[0236789]|14[57])[0-9]{8}$/;
     var mailReg = /^([a-zA-Z0_9_-])+@([a-zA-Z0_9_-])+(.[a-zA-Z0_9_-])+/;
-    var msgs = function(name) {
+
+
+    /**
+     * [msgs 验证信息提示内容]
+     * @param  {[type]} fieldname [字段名]
+     * @return {[type]}      [description]
+     */
+    var msgs = function(fieldname) {
         return {
             error_required: {
                 "msg": (function(n) {
                     return n + "不能为空";
-                })(name),
+                })(fieldname),
                 "className": "error"
             },
             error_length: {
@@ -42,6 +49,7 @@
 
     var validateResults = {};
 
+
     function $(element) {
         if (typeof element != "string") return;
 
@@ -55,6 +63,10 @@
 
     }
 
+    /**
+     * [inputHandler description]
+     * @return {[type]} [description]
+     */
     var inputHandler = function() {
         var $inputBox = $(".input-content");
         for (var i = 0; i < $inputBox.length; i++) {
@@ -85,17 +97,21 @@
 
         });
 
+        /**
+         * [isValidate 验证格式是否正确]
+         * @return {Boolean} [验证正确则返回ture，否则返回false]
+         */
         var isValidate = function() {
             var fieldname = this.name;
             var srcVal = this.value;
             var testVal = srcVal.trim();
-            var testStr = testVal.replace(chnReg, "--");
-            var tip = msgs(fieldname);
+            var testStr = testVal.replace(chnReg, "--"); //由于中文字占2个字节，因此判断到是中文后，用两个字符代替
+            var tip = msgs(fieldname);   
             var validate = null;
             if (testStr.length === 0) {
                 validate = tip.error_required;
             } else {
-                switch (fieldname) {
+                switch (fieldname) {  //根据字段名返回相应的验证提示内容
                     case "名称":
                         if (!lenReg.test(testStr)) {
                             validate = tip.error_length;
@@ -141,6 +157,12 @@
         };
     };
 
+    /**
+     * [renderInput description]
+     * @param  {[type]} ele      [description]
+     * @param  {[type]} validate [description]
+     * @return {[type]}          [description]
+     */
     var renderInput = function(ele, validate) {
         ele.className = "input-content " + validate.className;
         ele.nextElementSibling.className = "tip " + validate.className;

@@ -1,0 +1,63 @@
+/*
+* @Author: dontry
+* @Date:   2016-05-01 23:16:34
+* @Last Modified by:   dontry
+* @Last Modified time: 2016-05-02 13:12:27
+*/
+$orange: #eb9230;
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	color: #333;
+}
+
+body {
+	background-color: #ebebeb; 
+}
+
+.navbar {
+    background-color: $orange;
+    color: #fff;
+    h2 {
+    	margin-left: 20px;
+    }
+}
+
+.btn:active,
+.btn:focus,
+.btn:hover {
+    background-color: $orange;
+    color: #fff;
+}
+
+
+.clearfix:after {
+	both:clear;
+	display: block;
+	height:0;
+	content: '';
+	overflow: hidden;
+	line-height: 0;
+	font-size: 0;
+}
+
+.modal-dialog {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+    border-radius: 5px;
+    .modal-header {
+        border-bottom: 0px;
+    }
+    .modal-footer {
+        text-align: center;
+        border-top: 0;
+    }
+}

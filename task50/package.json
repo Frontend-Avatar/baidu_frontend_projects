@@ -1,0 +1,26 @@
+{
+  "name": "poll",
+  "version": "1.0.0",
+  "description": "ife poll",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ife",
+    "poll",
+    "webpack",
+    "npm",
+    "backbone"
+  ],
+  "author": "dontry",
+  "license": "MIT",
+  "devDependencies": {
+    "backbone": "^1.3.3",
+    "bootstrap": "^3.3.6",
+    "gulp": "^3.9.1",
+    "jquery": "^2.2.3",
+    "underscore": "^1.8.3",
+    "webpack": "^1.13.0"
+  }
+}

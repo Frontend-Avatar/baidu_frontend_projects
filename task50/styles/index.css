@@ -1,0 +1,61 @@
+/*
+* @Author: dontry
+* @Date:   2016-05-01 21:46:50
+* @Last Modified by:   dontry
+* @Last Modified time: 2016-05-02 13:20:49
+*/
+table {
+  width: 700px;
+  height: auto;
+  margin: 30px auto;
+  outline: 1px solid #cecece;
+  border-left: 10px solid #fff;
+  border-right: 10px solid #fff;
+  box-shadow: 0 5px 2px 3px #cecece; }
+  table tr {
+    height: 3em;
+    line-height: 3em; }
+  table thead {
+    border-left: 10px solid #ebebeb;
+    border-right: 10px solid #ebebeb; }
+    table thead .create {
+      float: right;
+      margin-top: 5px; }
+      table thead .create strong {
+        font-size: 1.3em; }
+  table tbody {
+    background-color: #fff; }
+    table tbody tr {
+      border-bottom: 1px solid #ddd; }
+    table tbody td:first-child {
+      width: 30px;
+      text-align: center; }
+    table tbody td.title {
+      min-width: 150px; }
+    table tbody td.time {
+      min-width: 100px; }
+    table tbody td.status {
+      min-width: 80px; }
+      table tbody td.status .publishing {
+        color: #50eb07; }
+    table tbody td.action {
+      text-align: right; }
+  table tfoot {
+    background-color: #fff; }
+    table tfoot input[type=radio] {
+      margin-left: 7px;
+      margin-right: 5px; }
+    table tfoot span {
+      margin-right: 10px; }
+
+.btn {
+  display: inline-block;
+  padding: 5px;
+  line-height: 16px; }
+
+.modal-dialog {
+  margin-top: 100px;
+  width: 500px;
+  height: 300px; }
+
+/*# sourceMappingURL=index.css.map */

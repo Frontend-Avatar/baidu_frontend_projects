@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>查看数据页</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles/common.css">
+    <link rel="stylesheet" href="../styles/data.css">
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../scripts/data.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <h2>问卷管理</h2>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <section class="main">
+        <div class="analysis-container">
+            <div class="analysis-head">
+                <!-- <div class="btn btn-default">返回</div> -->
+                <h2>这里是标题</h2>
+                <p>此统计分析只包含完整回收的数据</p>
+            </div>
+            <hr>
+            <div class="analysis-body">
+                <div class="question">
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Q1</td>
+                                <td>单选题</td>
+                                <td>数据占比</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="2"></td>
+                                <td class="option">选项一</td>
+                                <td class="ratio"> <div class="bar"><span></span></div>85%</td>
+                            </tr>
+                            <tr>
+                                <td class="option">选项二</td>
+                                <td class="ratio"><div class="bar"><span></span></div>15%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="question">
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Q2</td>
+                                <td>多选题</td>
+                                <td>数据占比</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="4"></td>
+                                <td class="option">选项一</td>
+                                <td rowspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td class="option">选项二</td>
+                            </tr>
+                            <tr>
+                                <td class="option">选项三</td>
+                            </tr>
+                            <tr>
+                                <td class="option">选项四</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr>
+            <div class="analysis-foot">
+            	<div class="btn btn-default">返回</div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
