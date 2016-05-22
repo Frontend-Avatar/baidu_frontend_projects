@@ -26,8 +26,8 @@
     				确认要删除此问卷？
     			</div>
     			<div class="modal-footer">
-    				<button type="button" class="btn-default btn">确认</button>
-    				<button type="button" class="btn-default btn" data-dismiss="modal">取消</button>
+    				<button type="button" class="btn-default btn confirm">确认</button>
+    				<button type="button" class="btn-default btn cancel" data-dismiss="modal">取消</button>
     			</div>
     		</div>
     	</div>
@@ -36,7 +36,7 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <h2>问卷管理</h2>
+                    <h2><i class="icon iconfont">&#xe604;</i>问卷管理</h2>
                 </div>
             </div>
         </nav>
@@ -54,10 +54,10 @@
                     </td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="#quiz-list">
                 <tr>
                     <td>
-                        <input type="radio" name="survey1">
+                        <input type="radio" name="quiz1">
                     </td>
                     <td class="title">
                         第一份问卷</td>
@@ -71,7 +71,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="radio" name="survey2">
+                        <input type="radio" name="quiz2">
                     </td>
                     <td class="title">第一份问卷</td>
                     <td class="time">2016.4.12</td>
@@ -93,6 +93,21 @@
             </tfoot>
         </table>
     </section>
-</body>
+
+    <script type="x-tmpl-mustache" id="quiz-item-template">
+        <td>
+            <input type="radio" name={{name}}>
+        </td>
+        <td class="title">
+            {{title}}</td>
+        <td class="time">{{time}}</td>
+        <td class="status"><span class="publishing">{{status}}</span></td>
+        <td class="action">
+            <div class="btn btn-default">编辑</div>
+            <div class="btn btn-default delete"  data-toggle="modal" data-target="dialog-delete">删除</div>
+            <div class="btn btn-default">查看数据</div>
+        </td>
+    </script>
+    </body>
 
 </html>

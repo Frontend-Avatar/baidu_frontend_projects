@@ -2,62 +2,124 @@
 * @Author: dontry
 * @Date:   2016-05-01 23:16:34
 * @Last Modified by:   dontry
-* @Last Modified time: 2016-05-02 13:12:27
+* @Last Modified time: 2016-05-20 23:07:19
 */
-$orange: #eb9230;
 
+$orange: #eb9230;
 * {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    font-family: "iconfont";
+    src: url('../assets/fonts/iconfont.eot?t=1462197129');
+    /* IE9*/
+    src: url('../assets/fonts/iconfont.eot?t=1462197129#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../assets/fonts/iconfont.woff?t=1462197129') format('woff'), /* chrome, firefox */
+    url('../assets/fonts/iconfont.ttf?t=1462197129') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+    url('../assets/fonts/iconfont.svg?t=1462197129#iconfont') format('svg');
+    /* iOS 4.1- */
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 html {
-	color: #333;
+    color: #333;
 }
 
 body {
-	background-color: #ebebeb; 
+    background-color: #ebebeb;
 }
 
 .navbar {
     background-color: $orange;
     color: #fff;
     h2 {
-    	margin-left: 20px;
+        margin-left: 20px;
+        i {
+            font-size: 1em;
+            margin-right: 5px;
+            vertical-align: 10%;
+        }
     }
 }
 
-.btn:active,
-.btn:focus,
-.btn:hover {
+.btn-default:active,
+.btn-default:focus,
+.btn-default:hover {
     background-color: $orange;
     color: #fff;
 }
 
+.btn.cancel {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #666;
+}
+
+.btn.cancel:active,
+.btn.cancel:focus,
+.btn.cancel:hover {
+    background-color: #cecece;
+    color: #fff;
+    border: 1px solid #cecece;
+}
 
 .clearfix:after {
-	both:clear;
-	display: block;
-	height:0;
-	content: '';
-	overflow: hidden;
-	line-height: 0;
-	font-size: 0;
+    both: clear;
+    display: block;
+    height: 0;
+    content: '';
+    overflow: hidden;
+    line-height: 0;
+    font-size: 0;
 }
 
 .modal-dialog {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
     border-radius: 5px;
     .modal-header {
+        background-color: #ebebeb;
         border-bottom: 0px;
+        border-radius: 5px 5px 0 0;
     }
     .modal-footer {
         text-align: center;
         border-top: 0;
     }
+}
+
+.option-list {
+    list-style: none;
+    input {
+        margin-right: 10px;
+    }
+    li {
+        margin-bottom: 5px;
+    }
+}
+
+.btn .iconfont {
+    margin-right: .2em;
+}
+
+.editable {
+  text-decoration: underline;
+}
+
+.editable:hover {
+  color: #aaa;
 }

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles/common.css">
+    <link rel="stylesheet" href="../styles/quiz.css">
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../node_modules/backbone/node_modules/underscore/underscore-min.js"></script>
+    <script src="../node_modules/backbone/backbone-min.js"></script>
+    <script src="../node_modules/mustache/mustache.min.js"></script>
+    <script src="../scripts/constants.js"></script>
+    <script src="../scripts/myBackbone.js"></script>
+    <script src="../scripts/quiz.js"></script>
+    <title>新建问卷</title>
+</head>
+
+<body>
+    <div class="modal" id="dialog-delete">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" data-dismiss="modal" aria-label="Close" class="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    确认要删除此问题？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-default btn confirm">确认</button>
+                    <button type="button" class="btn-default btn cancel" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="dialog-publish">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" data-dismiss="modal" aria-label="Close" class="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    是否发布问卷？
+                    <br> (此问卷截止日期2016-04-22)
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-default btn">确认</button>
+                    <button type="button" class="btn-default btn" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="dialog-editor">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title ">编辑问题</h3>
+                </div>
+                <div class="modal-body">
+                    <h4 class="title editable">问题题目</h4>
+                    <button class="btn-default btn btn-sm add-option" type="button">+ 添加选项</button>
+                    <ul class="option-list">
+                        <li>
+                            <input type="checkbox" name="q2" value="1"><span class="editable">选项一</span>
+                            <button class="cancel btn btn-xs remove-option">-</button>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="q2" value="2"><span class="editable">选项二</span>
+                            <button class="cancel btn btn-xs remove-option">-</button>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="q2" value="3"><span class="editable">选项三</span>
+                            <button class="cancel btn btn-xs remove-option">-</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-default btn confirm">确认</button>
+                    <button type="button" class="btn-default btn cancel" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <h2><i class="icon iconfont">&#xe604;</i>问卷管理</h2>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <section class="main">
+        <!-- <div class="btn btn-default btn-create">新建问卷</div> -->
+        <div class="quiz-container">
+            <div class="quiz-head">
+                <h3 class="editable">这里是标题</h3>
+            </div>
+            <hr>
+            <div class="quiz-body" id="question-list">
+                <div class="question">
+                    <div class="question-head">
+                        <span class="index">Q1</span><span class="title">单选题</span>
+                    </div>
+                    <div class="question-body">
+                        <ul class="option-list">
+                            <li>
+                                <input type="radio" name="q1" value="1">选项一</li>
+                            <li>
+                                <input type="radio" name="q2" value="2">选项二</li>
+                        </ul>
+                    </div>
+                    <div class="question-foot">
+                        <span class="btn btn-xs up">上移</span>
+                        <span class="btn btn-xs down">下移</span>
+                        <span class="btn btn-xs reuse">复用</span>
+                        <span class="btn btn-xs remove">删除</span>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-head">
+                        <span class="index">Q2</span><span class="title">多选题</span>
+                    </div>
+                    <div class="question-body">
+                        <ul class="option-list">
+                            <li>
+                                <input type="checkbox" name="q2" value="1">选项一</li>
+                            <li>
+                                <input type="checkbox" name="q2" value="2">选项二</li>
+                            <li>
+                                <input type="checkbox" name="q2" value="3">选项三</li>
+                        </ul>
+                    </div>
+                    <div class="question-foot">
+                        <span class="btn btn-xs up">上移</span>
+                        <span class="btn btn-xs down">下移</span>
+                        <span class="btn btn-xs reuse">复用</span>
+                        <span class="btn btn-xs remove">删除</span>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-head">
+                        <span class="index">Q3</span><span class="title">单选题</span>
+                    </div>
+                    <div class="question-body">
+                        <ul class="option-list">
+                            <li>
+                                <input type="radio">选项一</li>
+                            <li>
+                                <input type="radio">选项二</li>
+                            <li>
+                                <input type="radio">选项三</li>
+                        </ul>
+                    </div>
+                    <div class="question-foot">
+                        <span class="btn btn-xs up">上移</span>
+                        <span class="btn btn-xs down">下移</span>
+                        <span class="btn btn-xs reuse">复用</span>
+                        <span class="btn btn-xs remove">删除</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="quiz-foot">
+                <div class="question-add">
+                    <div class="btn-group-question">
+                        <div class="btn btn-default single"><i class="icon iconfont">&#xe601;</i>单选</div>
+                        <div class="btn btn-default multi"><i class="icon iconfont">&#xe603;</i>多选</div>
+                        <div class="btn btn-default txt"><i class="icon iconfont">&#xe602;</i>文本题</div>
+                    </div>
+                    <input type="button" class="btn btn-add" value="+ 添加问题" disabled/>
+                </div>
+                <div class="btn btn-default publish" data-toggle="modal" data-target="dialog-publish">发布问卷</div>
+                <div class="btn btn-default save">保存问卷</div>
+            </div>
+        </div>
+    </section>
+    <script type="x-tmpl-mustache" id="multi-question-template">
+        <div class="question-head">
+            <span class="index">Q{{index}}</span>(多选题) {{title}}
+        </div>
+        <div class="question-body">
+            <ul class="option-list">
+                {{#options}}
+                <li>
+                    <input type="checkbox" name={{name}} value={{value}}>{{content}}
+                </li>
+                {{/options}}
+            </ul>
+        </div>
+        <div class="question-foot">
+            <span class="btn btn-xs up">上移</span>
+            <span class="btn btn-xs down">下移</span>
+            <span class="btn btn-xs reuse">复用</span>
+            <span class="btn btn-xs remove">删除</span>
+        </div>
+    </script>
+    <script type="x-tmpl-mustache" id="single-question-template">
+        <div class="question-head">
+            <span class="index">Q{{index}}</span>(单选题) {{title}}
+        </div>
+        <div class="question-body">
+            <ul class="option-list">
+                {{#options}}
+                <li>
+                    <input type="radio" name={{name}} value={{value}}>{{content}}
+                </li>
+                {{/options}}
+            </ul>
+        </div>
+        <div class="question-foot">
+            <span class="btn btn-xs up">上移</span>
+            <span class="btn btn-xs down">下移</span>
+            <span class="btn btn-xs reuse">复用</span>
+            <span class="btn btn-xs remove">删除</span>
+        </div>
+    </script>
+</body>
+
+</html>

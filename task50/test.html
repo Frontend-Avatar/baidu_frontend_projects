@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test databse</title>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="scripts/DataBase.js"></script>
+</head>
+<body>
+    <button id="add">Add item</button>
+    <button id="get">Get item</button>
+    <button id="clear">clear all</button>
+    <button id="delete">delete database</button>
+    <script>
+    data1 = {
+        hey: 'jude'
+    }
+    window.onload = function() {
+        DataBase.open('test', 'quiz', function(){
+            return false;
+        });
+
+        $('#clear').click(function(){
+            DataBase.clear('quiz');
+        })
+
+        $('#add').click(function(){
+            addData(data1);
+        });
+
+        $('#delete').click(function() {
+            DataBase.delete();
+        })
+
+        $('#get').click(function() {
+            DataBase.fetchItem('quiz', 1463924340083, function(item){
+                console.log(item);
+                return false;
+            });
+        })
+
+
+        function addJSONdata() {
+            $.getJSON('test.json', function(data){
+                var obj = data.data;
+                DataBase.addItem('quiz', data.data, function(){
+                    document.write('Add Item OK!');
+                });
+            })
+        }
+
+        function addData(data) {
+            DataBase.addItem('quiz', data, function(){
+                document.write('Item added');
+            })
+        }
+    }
+    </script>
+</body>
+</html>

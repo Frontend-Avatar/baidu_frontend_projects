@@ -6,10 +6,10 @@
     <title>查看数据页</title>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../styles/common.css">
-    <link rel="stylesheet" href="../styles/data.css">
+    <link rel="stylesheet" href="../styles/result.css">
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="../scripts/data.js"></script>
+    <script src="../scripts/result.js"></script>
 </head>
 
 <body>
@@ -17,7 +17,7 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <h2>问卷管理</h2>
+                    <h2><i class="icon iconfont">&#xe604;</i>问卷管理</h2>
                 </div>
             </div>
         </nav>
@@ -87,6 +87,48 @@
             </div>
         </div>
     </section>
+    <script type="x-tmpl-mustache" id="multi-quiz-template">
+        <table>
+            <thead>
+                <tr>
+                    <td>Q{{index}}</td>
+                    <td>{{type}}</td>
+                    <td>数据占比</td>
+                </tr>
+            </thead>
+            <tbody>
+                {{#options}}
+                <tr>
+                    <td rowspan={{option_count}}></td>
+                    <td class="option">{{content}}</td>
+                    <td class="ratio"> <div class="bar"><span></span></div>{{ratio}}</td>
+                </tr>
+                {{/options}}
+            </tbody>
+        </table>
+    </script>
+    <script type="x-tmpl-mustache" id="single-quiz-template">
+        <table>
+            <thead>
+                <tr>
+                    <td>Q{{index}}</td>
+                    <td>{{type}}</td>
+                    <td>数据占比</td>
+                </tr>
+            </thead>
+            <tbody>
+                {{#options}}
+                <tr>
+                    <td rowspan={{option_count}}></td>
+                    <td class="option">{{title}}</td>
+                    {{#graph}}
+                    <td rowspan={{option_count}}></td>
+                    {{/graph}}
+                </tr>
+                {{/options}}
+            </tbody>
+        </table>
+    </script>
 </body>
 
 </html>

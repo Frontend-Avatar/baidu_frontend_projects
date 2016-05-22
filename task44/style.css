@@ -1,0 +1,28 @@
+/*
+* @Author: dontry
+* @Date:   2016-05-01 16:10:36
+* @Last Modified by:   dontry
+* @Last Modified time: 2016-05-01 16:12:06
+*/
+* {
+	padding: 0;
+	margin: 0;
+}
+
+#photo-album {
+	position: relative;
+}
+
+.pin {
+	padding: 15px 0 0 15px;
+}
+
+.box {
+	padding: : 10px;
+	border:1px solid #ccc;
+}
+
+.box img {
+	width: 162px;
+	height: auto;
+}

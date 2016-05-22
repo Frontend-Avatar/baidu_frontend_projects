@@ -2,7 +2,7 @@
 * @Author: dontry
 * @Date:   2016-05-02 10:25:38
 * @Last Modified by:   dontry
-* @Last Modified time: 2016-05-02 13:20:40
+* @Last Modified time: 2016-05-21 00:18:55
 */
 
 $orange: #eb9230;
@@ -32,12 +32,12 @@ $orange: #eb9230;
     }
 }
 
-.questionaire-container {
+.quiz-container {
     text-align: center;
     padding: 10px 20px;
 }
 
-.questionaire-head {
+.quiz-head {
     color: #666;
     padding: 10px 0;
     &:hover {
@@ -45,27 +45,67 @@ $orange: #eb9230;
     }
 }
 
-.questionaire-body {
+.quiz-body {
+    .question {
+        width: 90%;
+        margin: 0 auto 10px;
+        text-align: left;
+        padding: 10px;
+        &:hover {
+            background-color: #f7f2d1;
+        }
+        .question-head {
+            font-weight: bold;
+            span {
+                margin-right: 10px;
+            }
+        }
+        .question-body {
+            padding: 10px;
+        }
+        .question-foot {
+            padding: 10px;
+            text-align: right;
+            span {
+                color: #666;
+                margin-right: 10px;
+            }
+        }
+        .option-list {
+            margin-left: 20px;
+        }
+    }
+}
+
+.quiz-foot {
+    padding-bottom: 30px;
+    .btn {
+        margin-right: 25px;
+    }
     .question-add {
         width: 90%;
         color: #999;
         border: 1px solid #cecece;
-        margin: 30px auto 10px;
+        margin: 30px auto 30px;
         .btn-add {
             font-size: 1.2em;
-            background-color: #f7f7f7;
+            background-color: #cecece;
+            color: #fff;
             width: 100%;
             height: 60px;
-            line-height: 60px;
         }
         .btn-group-question {
             width: 100%;
             padding: 10px;
-            .btn {
+            .btn-default {
                 color: #999;
                 display: inline-block;
                 padding: 5px 15px;
                 background-color: #f7f7f7;
+                &.cur {
+                    background-color: $orange;
+                    color: #fff;
+                }
             }
             .btn + .btn {
                 margin-left: 20px;
@@ -74,51 +114,18 @@ $orange: #eb9230;
     }
 }
 
-.questionaire-foot {
-    .btn {
-        margin-right: 25px;
-    }
-}
-
-.question {
-    width: 90%;
-    margin: 0 auto 10px;
-    text-align: left;
-    padding: 10px;
-    &:hover {
-        background-color: #f7f2d1;
-    }
-    .question-head {
-        font-weight: bold;
-        span {
-            margin-right: 10px;
-        }
-    }
-    .question-body {
-        padding: 10px;
-        input {
-            margin-right: 10px;
-        }
-        ul {
-            list-style: none;
-            margin-left: 20px;
-            li {
-                margin-bottom: 5px;
-            }
-        }
-    }
-    .question-foot {
-        padding: 10px;
-        text-align: right;
-        span {
-            color: #666;
-            margin-right: 10px;
-        }
-    }
-}
-
 .modal-dialog {
-	margin-top: 100px;
-	width: 300px;
-	height: 200px;
+    margin-top: 100px;
+    width: 300px;
+    height: 200px;
+    .option-list {
+        margin-top: 10px;
+        li {
+            margin-bottom: 10px;
+        }
+    }
+    .btn.cancel {
+        margin-left: 5px;
+        font-weight: bolder;
+    }
 }
