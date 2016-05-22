@@ -2,12 +2,9 @@
  * @Author: dontry
  * @Date:   2016-04-12 11:43:45
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-04-19 10:46:59
- */
-
-/**
  * [该小方块能够同时识别键盘方向键以及输入框的命令]
  * @return {[type]} [description]
+ * @Last Modified time: 2016-05-22 23:06:02
  */
 (function() {
     'use strict';
@@ -117,8 +114,12 @@
     var box = new Box(0, 0);
     var turn = 1;  //通过一个turn变量持续记录方块旋转90度的次数，正数为顺时针，负数为逆时针
 
+<<<<<<< HEAD
 
     //响应键盘事件
+=======
+    //按键控制
+>>>>>>> don
     var keyHandler = function() {
         $body.addEventListener("keydown", function(evt) {
             var dir = evt.keyCode;
@@ -127,7 +128,11 @@
         }, false);
     };
 
+<<<<<<< HEAD
     //当输入框输入命令后，按“执行”按钮执行相应命令
+=======
+    //按钮控制
+>>>>>>> don
     var butttonHandler = function() {
         $btnExec.addEventListener("click", function() {
             var val = $cmd.value.toUpperCase();
