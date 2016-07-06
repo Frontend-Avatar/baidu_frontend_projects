@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>task24 (节点的删除)</title>
+    <style>
+    * {
+        padding: 0;
+        margin: 0;
+        font-family: arial;
+    }
+    
+    body {
+        width: 100%;
+        height: 1000px;
+    }
+    
+    .container {
+        margin: 0 auto;
+    }
+    
+    .panel {
+        text-align: center;
+        margin: 20px 20px;
+    }
+    
+    #root {}
+    
+    .node {
+        display: flex;
+        position: relative;
+        flex: 1;
+        border: 2px solid;
+        padding: 20px 10px;
+        background-color: #fff;
+    }
+    
+    .node + .node {
+        margin-left: 5px;
+    }
+    
+    .active {
+        background-color: red;
+    }
+    
+    button {
+        /*background-color: #3371fe;*/
+        padding: 5px 10px;
+        margin-right: 5px;
+    }
+    
+    label {
+        margin-left: 20px;
+    }
+    
+    input[type=number] {
+        width: 60px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="panel">
+            <button id="traversalDF">深度优先遍历</button>
+            <button id="traversalBF">广度优先遍历</button>
+            <label for="speed">速度(ms):</label>
+            <input type="number" id="speed">
+            <label for="query">查询:</label>
+            <input type="text" id="searchNode"></input>
+            <button id="search">确定</button>
+        </div>
+        <div class="node" id="root">super
+            <div class="node">
+                stuff
+                <div class="node">fruit
+                    <div class="node">apple</div>
+                    <div class="node">pear</div>
+                    <div class="node">grape</div>
+                </div>
+                <div class="node">electric application
+                    <div class="node">tv</div>
+                    <div class="node">phone</div>
+                </div>
+                <div class="node">book
+                    <div class="node">novel</div>
+                </div>
+            </div>
+            <div class="node">life
+                <div class="node">animal
+                    <div class="node">dog</div>
+                    <div class="node">cat</div>
+                </div>
+                <div class="node">plant
+                    <div class="node">tree</div>
+                    <div class="node">flower</div>
+                </div>
+                <div class="node">human
+                    <div class="node">American</div>
+                    <div class="node">African</div>
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <button id="remove">删除</button>
+            <label for="insertNode">插入元素：</label>
+            <input type="text" id="insertNode">
+            <button id="insert">确定</button>
+        </div>
+        <script>
+        //树对象
+        function Tree(ele) {
+            this.root = ele;
+            this.animStack = [];
+            this.msg = "";
+        }
+
+        //深度优先遍历
+        Tree.prototype.traverseDF = function(callback) {
+            var self = this;
+            (function recurse(node) {
+                callback.call(self, node);
+                for (var i = 0, length = node.children.length; i < length; i++) {
+                    recurse(node.children[i]);
+                }
+            })(self.root);
+        };
+
+        //广度优先遍历
+        Tree.prototype.traverseBF = function(callback) {
+            var queue, currentTree;
+            queue = new Queue();
+            queue.enqueue(this.root);
+            currentTree = queue.dequeue();
+            while (currentTree) {
+                callback.call(this, currentTree);
+                for (var i = 0; i < currentTree.children.length; i++) {
+                    queue.enqueue(currentTree.children[i]);
+                }
+                currentTree = queue.dequeue();
+            }
+        };
+
+        //
+        Tree.prototype.pushtoStack = function(node) {
+            this.animStack.push(node);
+        }
+
+        //定义一个队列用于广度优先遍历应用
+        function Queue() {
+            this.queue = [];
+        }
+
+        Queue.prototype.enqueue = function(node) {
+            this.queue.push(node);
+        }
+
+        Queue.prototype.dequeue = function(node) {
+            return this.queue.shift(node);
+        }
+
+
+        //将遍历的节点存入到播放组当中
+        Tree.prototype.addToStack = function(node) {
+            this.animStack.push(node);
+        };
+
+        //搜索
+        Tree.prototype.search = function(traversal, query) {
+            var self = this;
+            var isFound = false;
+            var queryReg = new RegExp("\\b" + query + "\\b", "i");
+            if (query == "") return;
+            var callback = function(node) {
+                var res = node.innerText.search(queryReg);//由于innerText会把之后子元素的内容都包括，因此不能用单纯等号判断，用正则表达式，并且要用search方法，因为像exec会不会重置index;
+                console.log(res);
+                if (res != null && res == 0) { 
+                    node.className += " found";
+                    isFound = true;
+                }
+                self.addToStack(node);
+            };
+            traversal.call(this, callback);
+            return isFound;
+        }
+
+        //重置树
+        Tree.prototype.resetTree = function() {
+            var nodes = document.getElementsByClassName("node");
+            for (var i = 0; i < nodes.length; i++) {
+                nodes[i].style.backgroundColor = "#fff";
+                nodes[i].className = "node";
+            }
+            this.animStack = [];
+        }
+
+        //插入
+        Tree.prototype.insert = function(word) {
+            if (word == "") return;
+            var node = document.getElementsByClassName("selected")[0];
+            var insertNode = document.createElement("div");
+            insertNode.className = "node";
+            insertNode.innerText = word;
+            insertNode.addEventListener("click", function(evt) {
+                var nodes = document.getElementsByClassName("node");
+                evt.stopPropagation();
+                for (var j = 0; j < nodes.length; j++) {
+                    nodes[j].className = "node";
+                    nodes[j].style.backgroundColor = "#fff";
+                }
+                this.className += " selected";
+                this.style.backgroundColor = "#0f0";
+            }, false);
+            node.appendChild(insertNode);
+        }
+
+        //移除
+        Tree.prototype.remove = function(node) {
+            node.parentNode.removeChild(node);
+        }
+
+
+        //遍历动画播放
+        Tree.prototype.showAnimation = function(msg) {
+            var iter = 0;
+            var self = this;
+            var speeder = document.getElementById("speed");
+            speed = speeder.value == 0 ? 200 : speeder.value;
+            self.animStack[iter].style.backgroundColor = self.animStack[iter].className.indexOf("found") == -1 ? "red" : "yellow";
+            var timer = setInterval(function() {
+                if (iter <= self.animStack.length - 1) {
+                    ++iter;
+                    if (self.animStack[iter - 1].className.indexOf("found") == -1)
+                        self.animStack[iter - 1].style.backgroundColor = "#fff";
+                    if(iter > self.animStack.length - 1) return;
+                    if (self.animStack[iter].className.indexOf("found") != -1)
+                        self.animStack[iter].style.backgroundColor = "yellow";
+                    else
+                        self.animStack[iter].style.backgroundColor = "red";
+                } else {
+                    clearInterval(timer);
+                    alert(self.msg);
+                }
+            }, speed);
+
+        };
+
+        //不同遍历方法的按钮
+        function addButtonHandlers() {
+            var self = this;
+            var buttons = document.getElementsByTagName("button");
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].addEventListener("click", function(evt) {
+                    evt.stopPropagation();
+                    var target = evt.target || window.target;
+                    switch (target.id) {
+                        case "traversalBF":
+                            self.resetTree();
+                            self.traverseBF(self.pushtoStack);
+                            self.msg = "Breath First Travesal is over";
+                            self.showAnimation(self.msg);
+                            break;
+                        case "traversalDF":
+                            self.resetTree();
+                            self.traverseDF(self.pushtoStack);
+                            self.msg = "Depth Frist Travesal is over";
+                            self.showAnimation(self.msg);
+                            break;
+                        case "search":
+                            self.resetTree();
+                            var queryWord = document.getElementById("searchNode").value;
+                            var isFound = self.search(self.traverseBF, queryWord);
+                            self.msg = isFound ? (queryWord + " has found.") : (queryWord + " not found");
+                            self.showAnimation(self.msg);
+                            break;
+                        case "remove":
+                            var node = document.getElementsByClassName("selected")[0];
+                            self.remove(node);
+                            break;
+                        case "insert":
+                            var insertWord = document.getElementById("insertNode").value;
+                            self.insert(insertWord);
+                            break;
+                    }
+                }, false);
+            }
+        }
+
+        function addNodeHandlers() {
+            var nodes = document.getElementsByClassName("node");
+            for (var i = 0; i < nodes.length; i++) {
+                nodes[i].addEventListener("click", function(evt) {
+                    evt.stopPropagation();
+                    for (var j = 0; j < nodes.length; j++) {
+                        nodes[j].className = "node";
+                        nodes[j].style.backgroundColor = "#fff";
+                    }
+                    this.className += " selected";
+                    this.style.backgroundColor = "#0f0";
+                }, false);
+            }
+        }
+
+        function addWindowHandler() {
+            var self = this;
+            var window = document.getElementsByTagName("body")[0];
+            window.addEventListener("click", function() {
+                var node = document.getElementsByClassName("node");
+                for (var i = 0; i < node.length; i++) {
+                    node[i].className = "node";
+                    node[i].style.backgroundColor = "#fff";
+                }
+            });
+        }
+
+        function addInputHandler() {
+            var input = document.getElementsByTagName("input");
+            for (var i = 0; i < input.length; i++) {
+                input[i].addEventListener("click", function(evt) {
+                    evt.stopPropagation();
+                });
+            }
+        }
+
+        window.onload = function() {
+            var tree = new Tree(document.getElementById("root"));
+            addButtonHandlers.call(tree);
+            addNodeHandlers();
+            addWindowHandler();
+            addInputHandler();
+        };
+        </script>
+</body>
+
+</html>

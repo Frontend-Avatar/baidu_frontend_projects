@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>task29</title>
+    <style>
+    label {
+        margin-right: 5px;
+    }
+
+    .wrapper {
+    	display: inline-block;
+    	vertical-align: top;
+    }
+    
+    .input-text {
+        width: 20em;
+        padding: 5px 5px;
+        border: 1px solid;
+        border-radius: 2px;
+    }
+    
+    .tip {
+    	font-size: 0.8em;
+    }
+
+
+    .validate {
+        display: inline-block;
+        padding: 0 5px;
+        width: 3em;
+        height: 1.5em;
+        line-height: 1.5em;
+        content: "验证";
+        border-radius: 5px;
+        color: #fff;
+        text-align: center;
+        background-color: #3B78FF;
+        margin-left: 20px;
+        vertical-align: middle;
+    }
+    
+    .info {
+        border-color: #c4c4c4;
+        color: #c4c4c4;
+    }
+    
+    .warning {
+        border-color: #f00;
+        color: #f00;
+    }
+    
+    .success {
+        border-color: #62bd59;
+        color: #62bd59;
+    }
+    </style>
+</head>
+
+<body>
+    <form action="">
+        <label for="name">名称</label>
+        <div class="wrapper">
+            <input class="input-text info" id="name" type="text">
+            <br>
+            <span class="tip info">必填，长度为4~16个字符</span>
+        </div>
+        <div class="validate">验证</div>
+    </form>
+</body>
+<script>
+var input = document.getElementById("name");
+var tip = document.getElementsByClassName("tip")[0];
+input.addEventListener("input", function(evt) {
+	var inputVal = input.value;
+	if( inputVal.length == 0){
+    	input.className = "input-text info";
+    	tip.className = "tip info";
+    	tip.innerText = "必填，长度为4~16个字符";
+	}else if (inputVal.length < 4 || inputVal.length > 16) {
+    	input.className = "input-text warning";
+    	tip.className = "tip warning";
+    	tip.innerText = "长度不符合要求";
+    }else {
+    	input.className = "input-text success";
+    	tip.className = "tip success";
+    	tip.innerText = "格式正确";
+    }
+
+
+})
+</script>
+
+</html>

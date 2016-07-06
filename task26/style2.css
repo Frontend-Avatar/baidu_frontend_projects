@@ -1,0 +1,88 @@
+* {
+    font-family: arial, sans-serif;
+}
+
+.container {
+    margin: 0 auto;
+    border: 1px solid #000;
+    width: 1100px;
+    height: 950px;
+    padding-bottom: 2px;
+}
+
+.gamepad {
+    position: relative;
+    float: left;
+    margin: 0 auto;
+    width: 800px;
+    height: 100%;
+}
+
+#screen, #background {
+    width: 100%;
+    height: 800px;
+    left: 0;
+}
+
+#screen {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    background: transparent;
+}
+
+#background {
+    position: relative;
+    z-index: 1;
+    background-color: #cecece;
+    top: 0px;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 10px;
+}
+
+.btn {
+    display: inline-block;
+    border: 1px solid #666;
+    border-radius: 2px;
+    padding: 2px 3px;
+    min-width: 60px;
+    text-align: center;
+    color: #999;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.btn:hover {
+    border: 1px solid #000;
+    color: #000;
+}
+
+.wrapper {
+    margin-bottom: 5px;
+}
+
+.console {
+    float: left;
+    overflow: scroll;
+    width: 300px;
+    height: 950px;
+}
+
+.console ul > li {
+    margin-bottom: 10px;
+    font-size: .8em;
+    line-height: 1;
+}
+
+.console h2 {
+    text-align: center;
+}
+
+.name {
+    text-transform: capitalize;
+}

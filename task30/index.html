@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>task30</title>
+</head>
+
+<body>
+    <form action="" id="myForm">
+        <div class="formgroup">
+            <label for="name">名称</label>
+            <div class="wrapper">
+                <input type="text" class="input-content info" id="name" name="名称" required>
+                <span class="tip info">必填，长度为4~16个字符</span>
+            </div>
+        </div>
+        <div class="formgroup">
+            <label for="password">密码</label>
+            <div class="wrapper">
+                <input type="text" class="input-content info" id="password" name="密码" required>
+                <span class="tip info">必填，密码长度8~16个字符，只包含英文和数字</span>
+            </div>
+        </div>
+        <div class="formgroup">
+            <label for="PasswordConfirm">密码确认</label>
+            <div class="wrapper" required>
+                <input type="text" class="input-content info" id="PasswordConfirm" name="密码确认" required>
+                <span class="tip info">必填，两次输入相同密码</span>
+            </div>
+        </div>
+        <div class="formgroup">
+            <label for="mail">邮箱</label>
+            <div class="wrapper">
+                <input type="text" class="input-content info" id="mail" name="邮箱" placeholder="XXXX@XXX.com" required>
+                <span class="tip info">必填,注意邮箱格式</span>
+            </div>
+        </div>
+        <div class="formgroup">
+            <label for="mobile">手机</label>
+            <div class="wrapper">
+                <input type="text" class="input-content info" id="mobile" name="手机" required>
+                <span class="tip info">必填，请输入11位手机号码</span>
+            </div>
+        </div>
+        <button type="submit" class="submit" id="submit">提交</button>
+    </form>
+    <script src="app.js"></script>
+</body>
+
+</html>

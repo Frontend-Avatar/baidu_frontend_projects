@@ -1,0 +1,129 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: arial, "Microsoft Yahei", sans-serif;
+}
+
+.container {
+    width: 900px;
+    position: relative;
+    margin: 20px;
+}
+
+table {
+    border-collapse: collapse;
+    position: relative;
+    margin-bottom: 20px;
+    border: 3px solid #000;
+}
+
+td {
+    border: 1px solid #cecece;
+    width: 40px;
+    height: 40px;
+}
+
+button {
+    border: 1px solid #cecece;
+    border-radius: 3px;
+    padding: 4px 8px;
+}
+
+.box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    margin-top: 3px;
+    margin-left: 3px;
+    box-sizing: border-box;
+    border-top: 10px solid blue;
+    width: 40px;
+    height: 40px;
+    background-color: red;
+    transition: all 0.5s ease;
+}
+
+.console {
+    position: relative;
+    background-color: #000;
+    margin-top: 10px;
+    height: 200px;
+    width: 415px;
+    border: 1px solid #000;
+}
+
+.console > * {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+.console textarea {
+    box-sizing: border-box;
+    position: absolute;
+    overflow: auto;
+    left: 30px;
+    padding: 8px 3px;
+    width: 385px;
+    height: 200px;
+    font-size: 1em;
+    font-weight: bold;
+    line-height: 20px;
+    color: #039b34;
+    background-color: #000;
+    resize: none;
+    text-indent: 0;
+}
+
+.console ol {
+    overflow: hidden;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    width: 30px;
+    height: 200px;
+    color: #fff;
+    background-color: #cecece;
+}
+
+.line-numbers li {
+    position: relative;
+    list-style: none;
+    height: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#pointer {
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: 5px;
+    border-top: 5px solid transparent;
+    border-left: 10px solid #f69000;
+    border-bottom: 5px solid transparent;
+}
+
+.error {
+    background-color: #f00;
+}
+
+
+
+.manual {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.manual ul {
+    line-height: 1.5em;
+}
+
+.manual h2 {
+    margin-bottom: 10px;
+}

@@ -1,0 +1,81 @@
+ label {
+     margin-right: 5px;
+ }
+ 
+ form {
+     width: 365px;
+ }
+ 
+ .formgroup {
+     width: 365px;
+     text-align: right;
+     margin-bottom: 10px;
+ }
+ 
+ label {
+     vertical-align: 120%;
+     font-family: "Microsoft Yahei";
+ }
+ 
+ .wrapper {
+     display: inline-block;
+     text-align: left;
+ }
+ 
+ .input-content {
+     width: 20em;
+     padding: 5px 5px;
+     border: 1px solid;
+     border-radius: 2px;
+     color: #333;
+ }
+ 
+ .tip {
+     display: block;
+     font-size: 0.8em;
+     visibility: hidden;
+     margin-top: 3px;
+ }
+ 
+ .submit {
+     display: inline-block;
+     padding: 3px 6px;
+     min-width: 4em;
+     font-size: 1em;
+     height: 2em;
+     line-height: 1.5em;
+     border: none;
+     border-radius: 5px;
+     color: #fff;
+     text-align: center;
+     background-color: #3B78FF;
+     margin-left: 20px;
+     vertical-align: middle;
+     float: right;
+     font-family: "Microsoft Yahei";
+     margin-right: 5px;
+ }
+ 
+ .info {
+     border-color: #c4c4c4;
+ }
+ 
+ .tip.info {
+     color: #c4c4c4;
+ }
+ 
+ .error {
+     border-color: #f00;
+ }
+ 
+ .tip.error {
+     color: #f00;
+ }
+ 
+ .correct {
+     border-color: #62bd59;
+ }
+ 
+ .tip.correct {
+     color: #62bd59;
+ }

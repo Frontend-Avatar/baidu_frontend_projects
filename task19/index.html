@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Task19</title>
+    <style>
+    input,
+    button,
+    .block {
+        display: inline-block;
+    }
+    
+    input {
+        width: 200px;
+    }
+    
+    #block-Queue {
+        margin-top: 5px;
+    }
+    
+    .block {
+        width: 30px;
+        line-height: 50px;
+        margin-right: 5px;
+        background-color: #f00;
+        color: #fff;
+        text-align: center;
+        font-size: 2em;
+    }
+    
+    #push,
+    #pop,
+    #sort,
+    #random {
+        margin-right: 20px;
+    }
+    </style>
+</head>
+
+<body>
+    <input id="number" type="number">
+    <button class="act-btn" id="unshift">左侧入</button>
+    <button class="act-btn" id="push">右侧入</button>
+    <button class="act-btn" id="shift">左侧出</button>
+    <button class="act-btn" id="pop">右侧出</button>
+    <button class="sort" id="bubble-sort">冒泡排序</button>
+    <button class="sort" id="quick-sort">快速排序</button>
+    <button id="random">随机生成队列</button>
+    <div id="block-Queue">
+        <!--         <div class="block">11</div>
+        <div class="block">20</div> -->
+    </div>
+    <script>
+    var MAX_LENGTH = 10;
+    var btns = $(".act-btn");
+    var sortBtns = $(".sort");
+    var randomBtn = $("#random");
+    var inputNumber = $("#number");
+    var blkQueue = $("#block-Queue");
+    var Queue = [];
+
+    function $(element) {
+        if (typeof element != "string") return;
+
+        if (element.indexOf("#") == 0) {
+            return document.getElementById(element.substring(1));
+        }
+
+        if (element.indexOf(".") == 0) {
+            return document.getElementsByClassName(element.substring(1));
+        }
+
+    }
+
+    function processQueue() {
+        for (var i = 0; i < btns.length; i++) {
+            btns[i].addEventListener("click", function(e) {
+                var number = parseInt(inputNumber.value);
+                if (!isValidate(number)) return;
+
+                switch (e.target.id) {
+                    case "unshift":
+                        if (number == "") {
+                            return;
+                        }
+                        Queue.unshift(number);
+                        console.log("unshift");
+                        break;
+                    case "shift":
+                        Queue.shift();
+                        console.log("shift");
+                        break;
+                    case "push":
+                        if (number == "") {
+                            return;
+                        }
+                        Queue.push(number);
+                        console.log("push");
+                        break;
+                    case "pop":
+                        Queue.pop();
+                        console.log("pop");
+                        break;
+                }
+                renderBlockQueue(Queue);
+            })
+        }
+    }
+
+
+    function isValidate(val) {
+        if (isNaN(val)) {
+            alert("非法字符！请重新输入！");
+            return false;
+        }
+        if (Queue.length >= MAX_LENGTH) {
+            alert("元素超过" + MAX_LENGTH + "个禁止添加!");
+            return false;
+        }
+        if (val < 10 || val > 100) {
+            alert("数字范围为10-100!");
+            return false;
+        }
+        return true;
+    }
+
+    function renderBlockQueue(queue) {
+        clearBlockQueue();
+        if (queue.length == 0) {
+            alert("数组队列为空");
+            return;
+        }
+        queue.forEach(function(item, index) {
+            var blk = document.createElement("div");
+            blk.className = "block";
+            blk.style.height = parseInt(item) * 5 + "px";
+            // blk.innerHTML = item + "0px";
+            blkQueue.appendChild(blk);
+        })
+
+    }
+
+    function clearBlockQueue() {
+        blkQueue.innerHTML = "";
+    }
+
+    function bubbleSort(q) {
+        var qStatus = [];
+        for (var i = q.length - 1; i >= 0; i--) {
+            for (var j = 0; j < i; j++) {
+                if (q[j] > q[j + 1]) {
+                    var tmp = q[j];
+                    q[j] = q[j + 1];
+                    q[j + 1] = tmp;
+
+                    qStatus.push(q.slice(0));
+                }
+            }
+        }
+        return qStatus;
+    }
+
+    function quickSort(q) {
+        var qStatus = [];
+       _qSort(0, q.length-1);
+       return qStatus;
+
+       function _qSort(l, r) {
+        if(l >= r ) {
+            return ;
+        }
+        var i, j, sentinel, temp;
+        i = l;
+        j = r;
+        sentinel = q[l];
+        while (i < j) {
+            while (q[j] >= sentinel && i < j)
+                j--;
+            while (q[i] <= sentinel && i < j)
+                i++
+                if (i < j) {
+                    temp = q[i];
+                    q[i] = q[j];
+                    q[j] = temp;
+                    console.log("q:"+q);
+                    qStatus.push(q.slice(0));
+                }
+        }
+        q[l] = q[i];
+        q[i] = sentinel;
+        qStatus.push(q.slice(0));
+        _qSort(l, i - 1);
+        _qSort(i + 1, r);
+       }
+
+       //another method
+       /*     function _qSort(l, r) {
+            if (l >= r) {
+                return;
+            }
+            var i, j, x;
+            i = l;
+            j = r;
+            x = q[l];
+            while (i < j) {
+                while (i < j && q[j] >= x)
+                    j--;
+                if (i < j) {
+                    q[i++] = q[j];
+                    qStatus.push(q.slice(0));
+                }
+
+                while (i < j && q[i] < x)
+                    i++
+                    if (i < j) {
+                        q[j--] = q[i];
+                        qStatus.push(q.slice(0));
+                    }
+            }
+            q[i] = x;
+            qStatus.push(q.slice(0));
+            _qSort(l, i - 1);
+            _qSort(i + 1, r);
+        }*/
+    }
+
+    function renderSort(queueStatus) {
+        var i = 0;
+        var process = setInterval(run, 500);
+
+        function run() {
+            if (i >= queueStatus.length) {
+                clearInterval(process);
+                return;
+            }
+            console.log("queueStatus:"+queueStatus[i]);
+            renderBlockQueue(queueStatus[i++]);
+        }
+    }
+
+    function initSort() {
+        var queueStatus = [];
+        for (var i = 0; i < sortBtns.length; i++) {
+            sortBtns[i].addEventListener("click", function(e) {
+                switch (e.target.id) {
+                    case "bubble-sort":
+                        queueStatus = bubbleSort(Queue);
+                        break;
+                    case "quick-sort":
+                        queueStatus = quickSort(Queue);
+                }
+                renderSort(queueStatus);
+            })
+        }
+    }
+
+
+    function randomQueue() {
+        var queue = [];
+        for (var i = 0; i < MAX_LENGTH; i++) {
+            queue.push(Math.round(Math.random() * 90 + 10));
+        }
+        return queue;
+    }
+
+
+    function initRandom() {
+        $("#random").addEventListener("click", function(e) {
+            Queue = randomQueue();
+            renderBlockQueue(Queue);
+        })
+    }
+
+    function initInput() {
+        inputNumber.addEventListener("click", function(e) {
+            this.value = "";
+        })
+    }
+
+
+    function initButtons() {
+        initSort();
+        initRandom();
+        processQueue();
+        initInput();
+    }
+
+    window.onload = function() {
+        initButtons();
+    };
+    </script>
+    
+</body>
+
+</html>

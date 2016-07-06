@@ -1,0 +1,72 @@
+   .container {
+       margin-top: 200px;
+       margin-left: 300px;
+       width: 600px;
+       text-align: left;
+       font-family: arial, "Microsoft Yahei", sans-serif;
+   }
+   
+    .radiogroup {
+        margin-bottom: 20px;
+        margin-left: 87px;
+    }
+
+   .radio {
+       display: inline-block;
+       height: 18px;
+       line-height: 18px;
+   }
+   
+   .radio + .radio {
+       margin-left: 20px;
+   }
+
+   input[type=radio] {
+    border: 1px solid #999;
+    width: 18px;
+    height: 18px;
+    margin-right: 5px;
+   }
+
+   .radio span {
+    display: inline-block;
+    vertical-align: 15%;
+    height: 20px;
+   }
+
+    .formgroup {
+        display: none;
+    }
+    
+    .formgroup input[type=text] {
+        width: 300px;
+        height: 1.5em;
+        line-height: 1.5em;
+        border: 1px solid #999;
+        border-radius: 4px;
+        box-shadow: none;
+        margin-bottom: 20px;
+        padding: 2px 5px;
+    }
+
+    .formgroup label {
+        margin-right: 20px;
+    }
+
+    .formgroup label[for=school] {
+        margin-left: 32px;
+    }
+
+    .formgroup select {
+        width: 100px;
+        height: 1.8em;
+        line-height: 1.5em;
+        padding: 2px 5px;
+    }
+
+
+    .formgroup select + select {
+        margin-left: 20px;
+    }
+
+

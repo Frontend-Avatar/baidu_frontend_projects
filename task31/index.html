@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>task31</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="radiogroup">
+            <div class="radio">
+                <input type="radio" class="radio" name="occupation" value="student" id="radioStudent"><span>在校生</span>
+            </div>
+            <div class="radio">
+                <input type="radio" class="radio" name="occupation" value="non-student" id="radioNonstudent"><span>非在校生</span>
+            </div>
+
+        </div>
+        <div class="wrapper-location">
+            <div class="formgroup" id="formgroupNonstudent">
+                <label for="workplace">在职单位:</label>
+                <input type="text" id="workplace" name="在职单位">
+            </div>
+            <div class="formgroup" id="formgroupStudent">
+                <label for="school">学校:</label>
+                <select name="city" id="city">所在城市</select>
+                <select name="school" id="school">所在学校</select>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>

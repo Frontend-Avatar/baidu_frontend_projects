@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery-1.12.1.min.js"></script>
+    <title>task26</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="console" id="console">
+            <h2>Console Log</h2>
+            <ul>
+            </ul>
+        </div>
+        <div class="gamepad">
+            <div class="screen">
+                <div class="container-info">
+                    <ul>
+                        <li id="info0">
+                            <h5>Spaceship No.1</h5>
+                            <span class="powerbar" id="powerbar0"></span>
+                        </li>
+                        <li id="info1">
+                            <h5>Spaceship No.2</h5>
+                            <span class="powerbar" id="powerbar1"></span>
+                        </li>
+                        <li id="info2">
+                            <h5>Spaceship No.3</h5>
+                            <span class="powerbar" id="powerbar2"></span>
+                        </li>
+                        <li id="info3">
+                            <h5>Spaceship No.4</h5> 
+                            <span class="powerbar" id="powerbar3"></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="planet"></div>
+                <div class="orbit" id="orbit1"> </div>
+                <div class="orbit" id="orbit2"> </div>
+                <div class="orbit" id="orbit3"></div>
+                <div class="orbit" id="orbit4"></div>
+                <div class="spaceship" id="spaceship00">
+                    <div class="bar"></div>
+                </div>
+                <div class="spaceship" id="spaceship01">
+                </div>
+                <div class="spaceship" id="spaceship02">
+                </div>
+                <div class="spaceship" id="spaceship03">
+                </div>
+                <!--      <div class="bar active" id="bar1"></div>
+                <div class="spaceship" id="spaceship2"> </div>
+                <div class="spaceship" id="spaceship3"> </div>
+                <div class="spaceship" id="spaceship4"> </div> -->
+            </div>
+            <form>
+                <fieldset>
+                    <legend>Commander panel</legend>
+                    <ul>
+                        <li class="wrapper">
+                            <span class="name">spaceship No.1: </span>
+                            <div class="btn" name="launch">launch</div>
+                            <div class="btn" name="fly">fly</div>
+                            <div class="btn" name="stop">stop</div>
+                            <div class="btn" name="destroy">destroy</div>
+                        </li>
+                        <li class="wrapper">
+                            <span class="name">spaceship No.2: </span>
+                            <div class="btn" name="launch">launch</div>
+                            <div class="btn" name="fly">fly</div>
+                            <div class="btn" name="stop">stop</div>
+                            <div class="btn" name="destroy">destroy</div>
+                        </li>
+                        <li class="wrapper">
+                            <span class="name">spaceship No.3: </span>
+                            <div class="btn" name="launch">launch</div>
+                            <div class="btn" name="fly">fly</div>
+                            <div class="btn" name="stop">stop</div>
+                            <div class="btn" name="destroy">destroy</div>
+                        </li>
+                        <li class="wrapper">
+                            <span class="name">spaceship No.4: </span>
+                            <div class="btn" name="launch">launch</div>
+                            <div class="btn" name="fly">fly</div>
+                            <div class="btn" name="stop">stop</div>
+                            <div class="btn" name="destroy">destroy</div>
+                        </li>
+                    </ul>
+                    <!--    <button class="create" id="create">create new spaceship</button> -->
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>

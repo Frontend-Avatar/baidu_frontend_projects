@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery-1.12.1.min.js"></script>
+    <title>task27</title>
+</head>
+
+<body>
+    <div class="mask f-dn"></div>
+    <div class="panel-option f-dn">
+        <div class="radiogroup-wrapper">
+            <form class="radiogroup">
+                <fieldset>
+                    <legend>
+                        <h3>Spaceship flight speed</h3></legend>
+                    <input type="radio" name="speed" value="slow" checked>slow
+                    <input type="radio" name="speed" value="medium">medium
+                    <input type="radio" name="speed" value="fast">fast
+                </fieldset>
+            </form>
+        </div>
+        <div class="radiogroup-wrapper">
+            <form class="radiogroup">
+                <fieldset>
+                    <legend>
+                        <h3>Spaceship charge rate</h3></legend>
+                    <input type="radio" name="power" value="slow" checked>slow
+                    <input type="radio" name="power" value="medium">medium
+                    <input type="radio" name="power" value="fast">fast
+                </fieldset>
+            </form>
+        </div>
+        <div class="btn-wrapper">
+            <div class="btn" id="confirm">confirm</div>
+            <div class="btn" id="cancel">cancel</div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="console" id="console">
+            <h2>Console Log</h2>
+            <ul>
+            </ul>
+        </div>
+        <div class="gamepad">
+            <canvas id="background">
+            </canvas>
+            <canvas id="screen">
+            </canvas>
+            <form>
+                <fieldset>
+                    <legend>Commander panel</legend>
+                    <ul>
+                        <li class="wrapper">
+                            <span class="name">spaceship No.1: </span>
+                            <div class="btn" name="launch">launch</div>
+                            <div class="btn" name="fly">fly</div>
+                            <div class="btn" name="stop">stop</div>
+                            <div class="btn" name="destroy">destroy</div>
+                        </li>
+                        <li class="wrapper">
+                            <span class="name">spaceship No.2: </span>
+                            <div class="btn" name="launch">launch</div>
+                            <div class="btn" name="fly">fly</div>
+                            <div class="btn" name="stop">stop</div>
+                            <div class="btn" name="destroy">destroy</div>
+                        </li>
+                        <li class="wrapper">
+                            <span class="name">spaceship No.3: </span>
+                            <div class="btn" name="launch">launch</div>
+                            <div class="btn" name="fly">fly</div>
+                            <div class="btn" name="stop">stop</div>
+                            <div class="btn" name="destroy">destroy</div>
+                        </li>
+                        <li class="wrapper">
+                            <span class="name">spaceship No.4: </span>
+                            <div class="btn" name="launch">launch</div>
+                            <div class="btn" name="fly">fly</div>
+                            <div class="btn" name="stop">stop</div>
+                            <div class="btn" name="destroy">destroy</div>
+                        </li>
+                    </ul>
+                    <!--    <button class="create" id="create">create new spaceship</button> -->
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>

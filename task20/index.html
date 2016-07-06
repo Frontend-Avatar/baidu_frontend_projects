@@ -1,0 +1,150 @@
+<!--
+                                                          :::      ::::::::
+     Task19.html                                        :+:      :+:    :+:
+                                                      +:+ +:+         +:+
+     By: caidong <caidong@student.42.fr>            +#+  +:+       +#+
+                                                  +#+#+#+#+#+   +#+
+     Created: 2016/03/28 22:14:48 by caidong           #+#    #+#
+     Updated: 2016/03/29 00:34:31 by caidong          ###   ########.fr
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Task20</title>
+    <style>
+    * {
+        margin: 2px;
+        padding: 0;
+    }
+    
+    #inputText {
+        float: left;
+        width: 200px;
+        height: 100px;
+    }
+    
+    #showText {
+        float: left;
+        width: 200px;
+        height: 100px;
+        border: 1px solid #cecece;
+        margin-left: 20px;
+    }
+    
+    .wrapper {
+        height: 120px;
+    }
+    
+    .wrapper:after {
+        content: "";
+        visibility: hidden;
+        clear: both;
+    }
+    
+    #pattern {
+        clear: both;
+        margin-top: 10px;
+        width: 200px;
+        height: 1em;
+    }
+    
+    .red {
+        color: #f00;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <textarea id="inputText"></textarea>
+        <p id="showText"></p>
+    </div>
+    <input type="text" id="pattern">
+    <button class="btn" id="query">查找</button>
+    <script>
+    function $(element) {
+        if (typeof element != "string") return;
+
+        if (element.indexOf("#") == 0) {
+            return document.getElementById(element.substring(1));
+        }
+
+        if (element.indexOf(".") == 0) {
+            return document.getElementsByClassName(element.substring(1));
+        }
+
+    }
+
+    var $query = $("#query"),
+        $pattern = $("#pattern"),
+        $showText = $("#showText"),
+        $inputText = $("#inputText");
+
+    var pattern = new RegExp($pattern.value, "g");
+
+    $inputText.addEventListener("change", function() {
+        $showText.innerHTML = $inputText.value;
+    });
+
+    /**
+     * [getWord 获得输入框里面的单词，通过正则表达式将单词相连的逗号、冒号、空格删除，得到单词数组]
+     * @param  {[type]} str [输入字符串]
+     * @return {[type]} output [单词数组]
+     */
+    function getWord(str) {
+        var str = str.trim();
+        var re = /[;,，、\s]+/
+        var output = str.split(re);
+        console.log(output);
+        return output;
+    }
+
+    /**
+     * [queryMatch 查询文本输入框里面的内容与单词数组中的元素作模糊匹配，若匹配则标红]
+     * @param  {[type]} pattern [查询文本]
+     * @param  {[type]} words   [单词数组]
+     * @return {[type]}         [description]
+     */
+    function queryMatch(pattern, words) {
+        var re = new RegExp(pattern);
+        var oriText = $inputText.value;
+        var replaceText = oriText;
+        words.forEach(function(item, idex) {
+            if (re.test(item)) {
+                var replaceWord = "<b class='red'>" + item + "</b>"
+                var wordRe = new RegExp("\\b" + item + "\\b", "g"); //创建匹配单词的正则表达式，通过\b限定单词边界，以免匹配包含相同字符的其他单词
+                console.log(wordRe);
+                replaceText = replaceText.replace(wordRe, replaceWord); //全局替换
+            }
+        });
+        $showText.innerHTML = replaceText;
+    }
+
+    /**
+     * [uniqueArray 数组去重]
+     * @param  {[type]} array [输入数组]
+     * @return {[type]} res   [去重后的数组]
+     */
+    function uniqueArray(array) {
+        var res = [];
+        for (var i = 0; i < array.length; i++) {
+            if (res.indexOf(array[i]) == -1) {
+                res.push(array[i]);
+            }
+        }
+        return res;
+    }
+
+
+    $query.addEventListener("click", function() {
+        var pattern = $pattern.value;
+        var result = getWord($inputText.value);
+        var words = uniqueArray(result);
+        queryMatch(pattern, words);
+    })
+    </script>
+</body>
+
+</html>
