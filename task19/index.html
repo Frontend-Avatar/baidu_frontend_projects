@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset='UTF-8'>
     <title>Task19</title>
     <style>
     input,
@@ -39,35 +39,35 @@
 </head>
 
 <body>
-    <input id="number" type="number">
-    <button class="act-btn" id="unshift">左侧入</button>
-    <button class="act-btn" id="push">右侧入</button>
-    <button class="act-btn" id="shift">左侧出</button>
-    <button class="act-btn" id="pop">右侧出</button>
-    <button class="sort" id="bubble-sort">冒泡排序</button>
-    <button class="sort" id="quick-sort">快速排序</button>
-    <button id="random">随机生成队列</button>
-    <div id="block-Queue">
-        <!--         <div class="block">11</div>
-        <div class="block">20</div> -->
+    <input id='number' type='number'>
+    <button class='act-btn' id='unshift'>左侧入</button>
+    <button class='act-btn' id='push'>右侧入</button>
+    <button class='act-btn' id='shift'>左侧出</button>
+    <button class='act-btn' id='pop'>右侧出</button>
+    <button class='sort' id='bubble-sort'>冒泡排序</button>
+    <button class='sort' id='quick-sort'>快速排序</button>
+    <button id='random'>随机生成队列</button>
+    <div id='block-Queue'>
+        <!--         <div class='block'>11</div>
+        <div class='block'>20</div> -->
     </div>
     <script>
     var MAX_LENGTH = 10;
-    var btns = $(".act-btn");
-    var sortBtns = $(".sort");
-    var randomBtn = $("#random");
-    var inputNumber = $("#number");
-    var blkQueue = $("#block-Queue");
+    var btns = $('.act-btn');
+    var sortBtns = $('.sort');
+    var randomBtn = $('#random');
+    var inputNumber = $('#number');
+    var blkQueue = $('#block-Queue');
     var Queue = [];
 
     function $(element) {
-        if (typeof element != "string") return;
+        if (typeof element != 'string') return;
 
-        if (element.indexOf("#") == 0) {
+        if (element.indexOf('#') == 0) {
             return document.getElementById(element.substring(1));
         }
 
-        if (element.indexOf(".") == 0) {
+        if (element.indexOf('.') == 0) {
             return document.getElementsByClassName(element.substring(1));
         }
 
@@ -75,32 +75,32 @@
 
     function processQueue() {
         for (var i = 0; i < btns.length; i++) {
-            btns[i].addEventListener("click", function(e) {
+            btns[i].addEventListener('click', function(e) {
                 var number = parseInt(inputNumber.value);
                 if (!isValidate(number)) return;
 
                 switch (e.target.id) {
-                    case "unshift":
-                        if (number == "") {
+                    case 'unshift':
+                        if (number == '') {
                             return;
                         }
                         Queue.unshift(number);
-                        console.log("unshift");
+                        console.log('unshift');
                         break;
-                    case "shift":
+                    case 'shift':
                         Queue.shift();
-                        console.log("shift");
+                        console.log('shift');
                         break;
-                    case "push":
-                        if (number == "") {
+                    case 'push':
+                        if (number == '') {
                             return;
                         }
                         Queue.push(number);
-                        console.log("push");
+                        console.log('push');
                         break;
-                    case "pop":
+                    case 'pop':
                         Queue.pop();
-                        console.log("pop");
+                        console.log('pop');
                         break;
                 }
                 renderBlockQueue(Queue);
@@ -111,15 +111,15 @@
 
     function isValidate(val) {
         if (isNaN(val)) {
-            alert("非法字符！请重新输入！");
+            alert('非法字符！请重新输入！');
             return false;
         }
         if (Queue.length >= MAX_LENGTH) {
-            alert("元素超过" + MAX_LENGTH + "个禁止添加!");
+            alert('元素超过' + MAX_LENGTH + '个禁止添加!');
             return false;
         }
         if (val < 10 || val > 100) {
-            alert("数字范围为10-100!");
+            alert('数字范围为10-100!');
             return false;
         }
         return true;
@@ -128,21 +128,21 @@
     function renderBlockQueue(queue) {
         clearBlockQueue();
         if (queue.length == 0) {
-            alert("数组队列为空");
+            alert('数组队列为空');
             return;
         }
         queue.forEach(function(item, index) {
-            var blk = document.createElement("div");
-            blk.className = "block";
-            blk.style.height = parseInt(item) * 5 + "px";
-            // blk.innerHTML = item + "0px";
+            var blk = document.createElement('div');
+            blk.className = 'block';
+            blk.style.height = parseInt(item) * 5 + 'px';
+            // blk.innerHTML = item + '0px';
             blkQueue.appendChild(blk);
         })
 
     }
 
     function clearBlockQueue() {
-        blkQueue.innerHTML = "";
+        blkQueue.innerHTML = '';
     }
 
     function bubbleSort(q) {
@@ -183,7 +183,7 @@
                     temp = q[i];
                     q[i] = q[j];
                     q[j] = temp;
-                    console.log("q:"+q);
+                    console.log('q:'+q);
                     qStatus.push(q.slice(0));
                 }
         }
@@ -234,7 +234,7 @@
                 clearInterval(process);
                 return;
             }
-            console.log("queueStatus:"+queueStatus[i]);
+            console.log('queueStatus:'+queueStatus[i]);
             renderBlockQueue(queueStatus[i++]);
         }
     }
@@ -242,12 +242,12 @@
     function initSort() {
         var queueStatus = [];
         for (var i = 0; i < sortBtns.length; i++) {
-            sortBtns[i].addEventListener("click", function(e) {
+            sortBtns[i].addEventListener('click', function(e) {
                 switch (e.target.id) {
-                    case "bubble-sort":
+                    case 'bubble-sort':
                         queueStatus = bubbleSort(Queue);
                         break;
-                    case "quick-sort":
+                    case 'quick-sort':
                         queueStatus = quickSort(Queue);
                 }
                 renderSort(queueStatus);
@@ -266,15 +266,15 @@
 
 
     function initRandom() {
-        $("#random").addEventListener("click", function(e) {
+        $('#random').addEventListener('click', function(e) {
             Queue = randomQueue();
             renderBlockQueue(Queue);
         })
     }
 
     function initInput() {
-        inputNumber.addEventListener("click", function(e) {
-            this.value = "";
+        inputNumber.addEventListener('click', function(e) {
+            this.value = '';
         })
     }
 

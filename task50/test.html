@@ -16,7 +16,7 @@
         hey: 'jude'
     }
     window.onload = function() {
-        DataBase.open('test', 'quiz', function(){
+        DataBase.open('quizDB', 'quizes', function(){
             return false;
         });
 
@@ -25,7 +25,8 @@
         })
 
         $('#add').click(function(){
-            addData(data1);
+            // addData(data1);
+            addJSONdata();
         });
 
         $('#delete').click(function() {
@@ -33,7 +34,7 @@
         })
 
         $('#get').click(function() {
-            DataBase.fetchItem('quiz', 1463924340083, function(item){
+            DataBase.fetchItem('quiz', 1463981525374, function(item){
                 console.log(item);
                 return false;
             });
@@ -42,9 +43,10 @@
 
         function addJSONdata() {
             $.getJSON('test.json', function(data){
-                var obj = data.data;
-                DataBase.addItem('quiz', data.data, function(){
-                    document.write('Add Item OK!');
+                // debugger
+                var obj = data;
+                DataBase.addItem('quiz', data.data[1], function(){
+                    document.write('Add Items OK!');
                 });
             })
         }

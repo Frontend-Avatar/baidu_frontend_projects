@@ -1,9 +1,9 @@
 /*
-* @Author: dontry
-* @Date:   2016-05-19 17:14:03
-* @Last Modified by:   dontry
-* @Last Modified time: 2016-05-22 09:48:25
-*/
+ * @Author: dontry
+ * @Date:   2016-05-19 17:14:03
+ * @Last Modified by:   dontry
+ * @Last Modified time: 2016-05-24 16:12:39
+ */
 
 'use strict';
 // var Backbone = require('backbone');
@@ -14,8 +14,9 @@ var app = app || {};
 /*------------Model---------------*/
 app.Quiz = Backbone.Model.extend({
     defaults: {
-        name: 'Unkno,wn',
-        title:'Unknown',
+        id: 'Unknown',
+        name: 'Unknown',
+        title: 'Unknown',
         time: '1900-1-1',
         status: '未发布', //未发布，已发布
         questions: []
@@ -57,27 +58,43 @@ app.Results = Backbone.Collection.extend({
 /*-----------Item View-----------------*/
 app.QuizView = Backbone.View.extend({
     tagName: 'tr',
+    className: 'item-quiz',
+    events: {
+        'click .btn.edit': 'edit',
+        'click .btn.delete': 'delete',
+        'click .btn.check': 'check'
+    },
     template: function(model) {
-        var template = $('#quiz-item-template').html();
+        var template = $('#quiz-template').html();
         Mustache.parse(template);
         return Mustache.render(template, model);
     },
     render: function() {
         this.$el.html(this.template(this.model.attributes));
+
+        return this;
+    },
+    close: function() {
+        this.stopListening();
+    },
+    edit: function() {
+        console.log('edit');
+    },
+    delete: function() {
+        console.log('deltete');
+    },
+    check: function() {
+        console.log('check');
     }
 });
 
 app.QuestionView = Backbone.View.extend({
     tagName: 'div',
     className: 'question',
-    initialize: function(initialItem) {
-        this.model = new app.Question(initialItem);
-        this.render();
-    },
     template: function(model) {
-        if(model.type === Constants.SINGLE){ //single option
+        if (model.type === Constants.SINGLE) { //single option
             var template = $('#single-question-template').html();
-        }else if(model.type === Constants.MULTI){
+        } else if (model.type === Constants.MULTI) {
             var template = $('#multi-question-template').html();
         }
         Mustache.parse(template);
@@ -85,6 +102,11 @@ app.QuestionView = Backbone.View.extend({
     },
     render: function() {
         this.$el.html(this.template(this.model.attributes));
+
+        return this;
+    },
+    close: function() {
+        this.stopListening();
     }
 });
 
@@ -103,14 +125,14 @@ app.QuizListView = Backbone.View.extend({
         }, this);
     },
     renderItem: function(item) {
-        var itemView = new app.QuizView({ model: item});
+        var itemView = new app.QuizView({ model: item });
         this.$el.append(itemView.render().el);
     }
 });
 
 app.QuestionListView = Backbone.View.extend({
     el: '#question-list',
-    initialize:function(initialItems) {
+    initialize: function(initialItems) {
         this.collection = new app.Questions(initialItems);
         this.render();
     },
@@ -121,7 +143,12 @@ app.QuestionListView = Backbone.View.extend({
         }, this);
     },
     renderItem: function(item) {
-        var itemView = new app.QuizView({model: item});
+        var itemView = new app.QuestionView({ model: item });
         this.$el.append(itemView.render().el);
     }
 });
+
+/*－－－－－－－－－－－App View－－－－－－－－－－－－*/
+var MainView = Backbone.View.extend({
+    el: $('#main'),
+})

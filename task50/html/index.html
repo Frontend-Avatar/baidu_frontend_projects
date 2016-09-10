@@ -9,28 +9,34 @@
     <link rel="stylesheet" href="../styles/index.css">
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../node_modules/backbone/node_modules/underscore/underscore-min.js"></script>
+    <script src="../node_modules/backbone/backbone-min.js"></script>
+    <script src="../node_modules/mustache/mustache.min.js"></script>
+    <script src="../scripts/constants.js"></script>
+    <script src="../scripts/myBackbone.js"></script>
+    <script src="../scripts/DataBase.js"></script>
     <script src="../scripts/index.js"></script>
 </head>
 
 <body>
     <div class="modal" id="dialog-delete">
-    	<div class="modal-dialog">
-    		<div class="modal-content">
-    			<div class="modal-header">
-    				<button type="button" data-dismiss="modal" aria-label="Close" class="close">
-    					<span aria-hidden="true">&times;</span>
-    				</button>
-    				<h4 class="modal-title">提示</h4>
-    			</div>
-    			<div class="modal-body">
-    				确认要删除此问卷？
-    			</div>
-    			<div class="modal-footer">
-    				<button type="button" class="btn-default btn confirm">确认</button>
-    				<button type="button" class="btn-default btn cancel" data-dismiss="modal">取消</button>
-    			</div>
-    		</div>
-    	</div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" data-dismiss="modal" aria-label="Close" class="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    确认要删除此问卷？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-default btn confirm">确认</button>
+                    <button type="button" class="btn-default btn cancel" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
     </div>
     <header>
         <nav class="navbar navbar-default">
@@ -54,7 +60,7 @@
                     </td>
                 </tr>
             </thead>
-            <tbody id="#quiz-list">
+            <tbody id="quiz-list">
                 <tr>
                     <td>
                         <input type="radio" name="quiz1">
@@ -65,7 +71,7 @@
                     <td class="status"><span class="publishing">发布中</span></td>
                     <td class="action">
                         <div class="btn btn-default">编辑</div>
-                        <div class="btn btn-default delete"  data-toggle="modal" data-target="dialog-delete">删除</div>
+                        <div class="btn btn-default delete" data-toggle="modal" data-target="dialog-delete">删除</div>
                         <div class="btn btn-default">查看数据</div>
                     </td>
                 </tr>
@@ -77,9 +83,9 @@
                     <td class="time">2016.4.12</td>
                     <td class="status"><span class="unpublished">未发布</span></td>
                     <td class="action">
-                        <div class="btn btn-default">编辑</div>
+                        <div class="btn btn-default edit">编辑</div>
                         <div class="btn btn-default delete" data-toggle="modal" data-target="dialog-delete">删除</div>
-                        <div class="btn btn-default">查看数据</div>
+                        <div class="btn btn-default check">查看数据</div>
                     </td>
                 </tr>
             </tbody>
@@ -93,21 +99,23 @@
             </tfoot>
         </table>
     </section>
-
-    <script type="x-tmpl-mustache" id="quiz-item-template">
+    <button id="add">Add item</button>
+    <button id="get">Get item</button>
+    <button id="clear">clear all</button>
+    <button id="delete">delete database</button>
+    <script type="x-tmpl-mustache" id="quiz-template">
         <td>
             <input type="radio" name={{name}}>
         </td>
-        <td class="title">
-            {{title}}</td>
+        <td class="title">{{title}}</td>
         <td class="time">{{time}}</td>
         <td class="status"><span class="publishing">{{status}}</span></td>
-        <td class="action">
-            <div class="btn btn-default">编辑</div>
-            <div class="btn btn-default delete"  data-toggle="modal" data-target="dialog-delete">删除</div>
-            <div class="btn btn-default">查看数据</div>
+        <td class="action" id={{id}}>
+            <div class="btn btn-default edit">编辑</div>
+            <div class="btn btn-default delete" data-toggle="modal" data-target="dialog-delete">删除</div>
+            <div class="btn btn-default check">查看数据</div>
         </td>
     </script>
-    </body>
+</body>
 
 </html>

@@ -2,7 +2,7 @@
  * @Author: dontry
  * @Date:   2016-05-21 10:25:35
  * @Last Modified by:   dontry
- * @Last Modified time: 2016-05-22 21:43:43
+ * @Last Modified time: 2016-05-23 15:06:44
  */
 
 
@@ -34,8 +34,8 @@ var DataBase = (function() {
                 db.deleteObjectStore(storageName);
             }
 
-            var store = db.createObjectStore(storageName, {
-                keyPath: 'timestamp'
+            db.createObjectStore(storageName, {
+                keyPath: 'quiz_id'
             });
         };
 
@@ -64,11 +64,11 @@ var DataBase = (function() {
        var request = indexedDB.deleteDatabase(dataBaseName);
 
       request.onerror = function(event) {
-        console.log("Error deleting database.");
+        console.log('Error deleting database.');
       };
        
       request.onsuccess = function(event) {
-        console.log("Database deleted successfully");
+        console.log('Database deleted successfully.');
           
         console.log(request.result); // should be null
       };
@@ -114,7 +114,7 @@ var DataBase = (function() {
 
         var item = {
             'data': data,
-            'timestamp': timestamp
+            'quiz_id': 'quiz_' + timestamp
         };
 
         var request = objStore.put(item);
