@@ -2,7 +2,7 @@
 * @Author: dontry
 * @Date:   2016-10-23 23:39:45
 * @Last Modified by:   dontry
-* @Last Modified time: 2016-10-27 16:37:33
+* @Last Modified time: 2016-10-27 16:49:07
 */
 
 body {
@@ -10,7 +10,7 @@ body {
     background-color: #7885FF;
 }
 
-h1,
+h1, h2,
 h4 {
     text-align: center;
 }
